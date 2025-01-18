@@ -19,6 +19,7 @@ public class SimonsSumsScript : MonoBehaviour {
     private TextMesh newText;
     public Material[] materials;
     public Renderer[] ButtonMaterials;
+    public KMColorblindMode CBM;
 
     private Color32 colorStored;
 
@@ -33,6 +34,7 @@ public class SimonsSumsScript : MonoBehaviour {
     private int stage = 1;
 
     private int tempPress;
+    private int tempHL;
 
     private int x = 0;
     private int y = 0;
@@ -68,6 +70,8 @@ public class SimonsSumsScript : MonoBehaviour {
     private string[] stages = { "", "", "", "" }; // Colors that flash in each stage
     private string order = ""; // The button order, north clockwise
 
+    private char initialFinal = ' '; // Required for fixing a bug where the button that needs to be pressed in the final stage changes upon a strike
+
     private int BRUG = 0; // Detects the GGGY case. It will be 4 if GGGY (or similar) happens
 
     // Placeholders
@@ -98,6 +102,11 @@ public class SimonsSumsScript : MonoBehaviour {
 
     private string solveText = "";
 
+    private string displayText = ""; // Colorblind mode usage
+    private string colorText = ""; // Colorblind mode usage
+
+    private bool colorblindMode;
+
     void Awake() {
     
         _moduleID = _moduleIdCounter++;
@@ -108,6 +117,14 @@ public class SimonsSumsScript : MonoBehaviour {
             {
                 ButtonPress(Button);
                 return false;
+            };
+            Button.OnHighlight += delegate ()
+            {
+                HLButton(Button);
+            };
+            Button.OnHighlightEnded += delegate ()
+            {
+                HLEndButton(Button);
             };
         }
         
@@ -123,6 +140,8 @@ public class SimonsSumsScript : MonoBehaviour {
         sequences[1] = StrikeSequence();
         sequences[2] = SolveAnimation();
         sequences[3] = TextAnimation();
+
+        colorblindMode = CBM.ColorblindModeActive;
 
         // Generating button colors
         uselessInt = 0;
@@ -143,7 +162,7 @@ public class SimonsSumsScript : MonoBehaviour {
 
         Debug.LogFormat("[Simon's Sums #{0}] Initializing button positions took {1} ticks.", _moduleID, uselessInt);
 
-        newText.text = "1";
+        displayText = "1";
 
         order = "" + colorsB[0] + colorsB[1] + colorsB[2]
             + colorsB[3] + colorsB[4] + colorsB[5];
@@ -282,9 +301,8 @@ public class SimonsSumsScript : MonoBehaviour {
                 if (i != 0)
                 {
                     pos = order.IndexOf(stages[ii][i - 1]) - order.IndexOf(stages[ii][i]);
-
-                    // I spent 20 minutes trying to bugfix this part.
-                    // There may have been a better way for me to do it but at this point I don't care.
+                    
+                    // There may have been a better way for me to do it
 
                     if (pos < 0)
                     {
@@ -415,6 +433,10 @@ public class SimonsSumsScript : MonoBehaviour {
                 // The final button
 
                 Debug.LogFormat("[Simon's Sums #{0}] Now that you have pressed three colors, it is time to calculate the final press.", _moduleID);
+
+                // I forgot to change it back upon a strike, thanks Quinn Wuest
+
+                presses[2] = "" + presses[2][0] + presses[2][1] + presses[2][2] + initialFinal;
 
                 // 1. Take the sum of the F-values and the I-value of the button with the “target button”, which right now, is the button with the largest F-value, and make it your X-value.
 
@@ -628,15 +650,15 @@ public class SimonsSumsScript : MonoBehaviour {
             i = i % (4 + 2 * stage);
             if (i == 0)
             {
-                newText.text = stage.ToString();
+                displayText = stage.ToString();
             }
             else if (i % 2 == 0)
             {
-                newText.text = colorResult[(i-2)/2].ToString();
+                displayText = colorResult[(i-2)/2].ToString();
             }
             else
             {
-                newText.text = "";
+                displayText = "";
             }
 
             yield return new WaitForSeconds(0.1414f);
@@ -804,7 +826,7 @@ public class SimonsSumsScript : MonoBehaviour {
                     // Module solved.
                     StopCoroutine(sequences[0]);
                     StopCoroutine(sequences[1]);
-                    newText.text = "";
+                    displayText = "";
                     StartCoroutine(sequences[2]);
                 }
                 else
@@ -973,6 +995,8 @@ public class SimonsSumsScript : MonoBehaviour {
 
                             Debug.LogFormat("[Simon's Sums #{0}] The third stage's first 3 presses are {1}, {2}, and {3}. The final press will be determined once you press your third button.", _moduleID, presses[2][0], presses[2][1], presses[2][2]);
 
+                            initialFinal = presses[2][3];
+
                             for (int j = 0; j < 3; j++)
                             {
                                 x = 0;
@@ -1025,7 +1049,7 @@ public class SimonsSumsScript : MonoBehaviour {
                     }
 
                     stage++;
-            newText.text = stage.ToString();
+            displayText = stage.ToString();
                 }
             }
 
@@ -1036,8 +1060,24 @@ public class SimonsSumsScript : MonoBehaviour {
     {
         if (!_moduleSolved)
         {
-
+            for (int i = 0; i < 6; i++)
+            {
+                if (Buttons[i] == Button)
+                {
+                    tempHL = i;
+                    break;
+                }
+            }
+            colorText = "" + order[tempHL];
         }
+        else
+        {
+            colorText = "";
+        }
+    }
+    void HLEndButton(KMSelectable Button)
+    {
+        colorText = "";
     }
 
     private IEnumerator SolveAnimation()
@@ -1065,6 +1105,7 @@ public class SimonsSumsScript : MonoBehaviour {
         {
             // Skips the solve animation if there is less than one minute remaining on the bomb timer
             Module.HandlePass();
+            StartCoroutine(sequences[3]);
             for (int j = 0; j < 6; j++)
             {
                 colorStored = Buttons[j].GetComponent<MeshRenderer>().material.color;
@@ -1332,22 +1373,114 @@ public class SimonsSumsScript : MonoBehaviour {
 
         for (int i = 0; i < solveText.Length; i++)
         {
-            newText.text = "" + solveText[i];
+            displayText = "" + solveText[i];
             yield return new WaitForSeconds(0.07f);
-            newText.text = "";
+            displayText = "";
             yield return new WaitForSeconds(0.07f);
         }
     }
 
-	// Update is called once per frame
-	void Update () {
-		
+    // Update is called once per frame
+    // Colorblind mode
+    void Update () {
+		if (!_moduleSolved && colorblindMode)
+        {
+            if (colorText == "")
+            {
+                newText.text = displayText;
+            }
+            else
+            {
+                newText.text = colorText;
+            }
+        }
+        else newText.text = displayText;
 	}
 
-    // TP support and colorblind will come out when I *feel like it*
-
-    /*private IEnumerator TwitchHandleForcedSolve()
+    // Pre-TP
+    private bool isInputValid(string a)
     {
-        Debug.LogFormat("[Simon's Sums #{0}] Autosolver requested by Twitch Plays.", _moduleID);
-    }*/
+        int temp1 = 0;
+        bool preformed = int.TryParse(a, out temp1);
+        return (preformed == true && (temp1 >= 0 && temp1 <= 14));
+    }
+    private bool isInputValid2(string a)
+    {
+        return a.EqualsIgnoreCase("r") || a.EqualsIgnoreCase("g") || a.EqualsIgnoreCase("b") || a.EqualsIgnoreCase("c") || a.EqualsIgnoreCase("m") || a.EqualsIgnoreCase("y") || a.EqualsIgnoreCase("red") || a.EqualsIgnoreCase("green") || a.EqualsIgnoreCase("blue") || a.EqualsIgnoreCase("cyan") || a.EqualsIgnoreCase("magenta") || a.EqualsIgnoreCase("yellow");
+    }
+    // Twitch Plays
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} <X> <Y> [Presses the color X (red/green/blue/cyan/magenta/yellow, or r/g/b/c/m/y) when the sum of the timer digits is Y (needs to be an integer in the range 0-14 inclusive)] // !{0} examine [Re-angles the bomb to see the flashes easier]// !{0} stopexamine [Re-angles the bomb to its normal state]";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        string[] parameters = command.Split(' ');
+
+        if (parameters.Length == 2)
+        {
+            if (isInputValid2(parameters[0]))
+            {
+                if (isInputValid(parameters[1]))
+                {
+                    yield return null;
+                    int timepress = 0;
+                    int.TryParse(parameters[1], out timepress);
+                    if (parameters[0].EqualsIgnoreCase("r") || parameters[0].EqualsIgnoreCase("red"))
+                    {
+                        yield return "sendtochat We are pressing red when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("R")].OnInteract();
+                    }
+                    else if (parameters[0].EqualsIgnoreCase("g") || parameters[0].EqualsIgnoreCase("green"))
+                    {
+                        yield return "sendtochat We are pressing green when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("G")].OnInteract();
+                    }
+                    else if (parameters[0].EqualsIgnoreCase("b") || parameters[0].EqualsIgnoreCase("blue"))
+                    {
+                        yield return "sendtochat We are pressing blue when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("B")].OnInteract();
+                    }
+                    else if (parameters[0].EqualsIgnoreCase("c") || parameters[0].EqualsIgnoreCase("cyan"))
+                    {
+                        yield return "sendtochat We are pressing cyan when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("C")].OnInteract();
+                    }
+                    else if (parameters[0].EqualsIgnoreCase("m") || parameters[0].EqualsIgnoreCase("magenta"))
+                    {
+                        yield return "sendtochat We are pressing magenta when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("M")].OnInteract();
+                    }
+                    else if (parameters[0].EqualsIgnoreCase("y") || parameters[0].EqualsIgnoreCase("yellow"))
+                    {
+                        yield return "sendtochat We are pressing yellow when the sum of the last two digits of the timer is " + timepress + "!";
+                        while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
+                        Buttons[order.IndexOf("Y")].OnInteract();
+                    }
+                }
+                else yield return "sendtochaterror The specified sum to press is invalid!";
+            }
+            else yield return "sendtochaterror That color doesn't exist in the module!";
+        }
+        else if (parameters.Length == 1)
+        {
+            if (parameters[0] == "examine")
+            {
+                yield return null;
+                yield return "sendtochat Rotating the bomb to top-left!";
+            }
+            else if (parameters[0] == "stopexamine")
+            {
+                yield return null;
+                yield return "sendtochat Rotating the bomb back to center!";
+            }
+            else yield return "sendtochaterror That command doesn't exist!";
+        }
+        else yield return "sendtochaterror That command doesn't exist!";
+    }
 }

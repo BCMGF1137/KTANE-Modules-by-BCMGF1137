@@ -34,8 +34,7 @@ MonoBehaviour:
     https://www.newgrounds.com/audio/listen/992229
 
 
-    Colorblind and TP will come out when I feel like it (because they take a bit of
-    time to code up)'
+    This has colorblind and TP support :)'
   version: 1.0.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 64f122d188040224f891548441215f41, type: 3}
