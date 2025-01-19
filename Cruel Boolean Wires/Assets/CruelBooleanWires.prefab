@@ -649,8 +649,8 @@ GameObject:
   - component: {fileID: 114075499480582764}
   - component: {fileID: 114876367415239540}
   - component: {fileID: 114372847004720210}
-  - component: {fileID: 114145114982026174}
   - component: {fileID: 114843916830171320}
+  - component: {fileID: 114145114982026174}
   m_Layer: 0
   m_Name: CruelBooleanWires
   m_TagString: Untagged

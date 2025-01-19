@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using KModkit;
 
 public class CBWScript : MonoBehaviour {
 
@@ -21,14 +23,13 @@ public class CBWScript : MonoBehaviour {
     void Awake()
     {
         _moduleID = _moduleIdCounter++;
+        
     }
-
-    
 
     // Use this for initialization
     void Start () {
-
-        Generate();
+        Module = GetComponent<KMBombModule>();
+        Module.OnActivate += Generate;
 	}
 
     // Determining values
@@ -36,17 +37,15 @@ public class CBWScript : MonoBehaviour {
     {
         // ===PART 1: GENERATING BOOLEANS===
 
-        Debug.LogFormat("[Cruel Boolean Wires #{0}] Value 0 is currently {1}.", _moduleID, booleanValues[0].toString());
-
         stage++;
-
         // Value 0
         if (stage % 3 == 0) booleanValues[0].setValue("U");
         else if (stage % 3 == 1) booleanValues[0].setValue("T");
         else booleanValues[0].setValue("F");
 
         // Value 1
-        if (Bomb.GetModuleNames().Contains("Bamboozled Again") || Bomb.GetModuleNames().Contains("Ultimate Cycle") || Bomb.GetModuleNames().Contains("UltraStores")) booleanValues[1].setValue("T");
+        if (Bomb.GetModuleNames().Contains("Bamboozled Again") || Bomb.GetModuleNames().Contains("Ultimate Cycle") || Bomb.GetModuleNames().Contains("UltraStores"))
+            booleanValues[1].setValue("T");
         else if (Bomb.GetModuleNames().Contains("Question Mark") || Bomb.GetModuleNames().Contains("Astrology")) booleanValues[1].setValue("U");
         else booleanValues[1].setValue("F");
 
