@@ -1,0 +1,10 @@
+{
+  "name": "CruelBooleanWires-Editor",
+  "references": [
+    "CruelBooleanWires"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
