@@ -1,0 +1,10 @@
+{
+  "name": "ModuloMaze-Editor",
+  "references": [
+    "ModuloMaze"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
