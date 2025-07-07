@@ -816,7 +816,7 @@ public class CBWScript : MonoBehaviour {
             else
             {
                 chk = false;
-                for (int i = 2; i < 90; i++)
+                for (int i = 2; i < Math.Min(90, temp); i++)
                 {
                     if (temp % i == 0)
                     {
@@ -1206,9 +1206,9 @@ public class CBWScript : MonoBehaviour {
             temp2 = Bomb.GetModuleNames().Count(name => name.Contains("Simon"));
             Debug.LogFormat("[Cruel Boolean Wires #{0}] (There are " + temp2 + " modules with the word \"Simon\" in them.)", _moduleID);
             chk = false;
-            for (int i = 2; i < 400; i++)
+            for (int i = 2; i < temp2; i++)
             {
-                if (temp % i == 0)
+                if (temp2 % i == 0)
                 {
                     chk = true;
                     break;
