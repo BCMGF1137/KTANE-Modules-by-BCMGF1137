@@ -824,7 +824,7 @@ public class CBWScript : MonoBehaviour {
                         break;
                     }
                 }
-                if (!chk && temp != 0)
+                if (!chk && temp > 1)
                 {
                     booleanValues[10].setValue("T");
                     Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value A is TRUE because the resulting number (" + temp + ") is prime.", _moduleID);
@@ -1215,7 +1215,7 @@ public class CBWScript : MonoBehaviour {
                 }
             }
             temp = 0;
-            if (!chk)
+            if (!chk && temp2 > 1)
             {
                 temp++;
                 Debug.LogFormat("[Cruel Boolean Wires #{0}] (" + temp2 + " is a prime number.)", _moduleID);
