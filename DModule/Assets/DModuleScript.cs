@@ -321,4 +321,24 @@ public class DModuleScript : MonoBehaviour {
             Debug.LogFormat("[D #{0}] Input cleared due to reset command.", _moduleID);
         }
     }
+
+    IEnumerator TwitchHandleForcedSolve() // My first autosolver, 6 months later :)
+    {
+        Debug.LogFormat("[D #{0}] Autosolving (TP).", _moduleID);
+        yield return null;
+        _finalInput = "";
+        if (_isSolved)
+        {
+            yield break;
+        }
+        _finalInput = "";
+        for (int i = 0; i < 6; i++)
+        {
+            while (_expectedInput[i].ToString() != ((int)Bomb.GetTime() % 10).ToString())
+            {
+                yield return new WaitForSeconds(.1f);
+            }
+            deafShapeD.OnInteract();
+        }
+    }
 }

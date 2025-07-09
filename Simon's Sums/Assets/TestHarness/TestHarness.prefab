@@ -20159,15 +20159,15 @@ MonoBehaviour:
   HighlightPrefab: {fileID: 100000, guid: d78a484c6e87f1b47b6596ac080fe942, type: 2}
   AudioVolume: 0.25
   AudioClips:
-  - {fileID: 8300000, guid: 03b59ab7cac451743ae60aab1818c230, type: 3}
-  - {fileID: 8300000, guid: 144206d8da8433742a2f114f871938f8, type: 3}
-  - {fileID: 8300000, guid: c00eb103eaa1a514e9d7163fc99e4d6b, type: 3}
-  - {fileID: 8300000, guid: e1f4650aeb06f1e439a3211890fce821, type: 3}
-  - {fileID: 8300000, guid: ef4b8442e53945f4b85eb8e408d967bb, type: 3}
-  - {fileID: 8300000, guid: 590b313b7db4a724fac24ada503f1644, type: 3}
-  - {fileID: 8300000, guid: bae5c0f13d99b284d878d73a2f1d31fb, type: 3}
-  - {fileID: 8300000, guid: 37a4ce18c9e90044da6a5dfed0ef26d4, type: 3}
-  - {fileID: 8300000, guid: b3c043ef3e372d64e9aabccf7c22d745, type: 3}
+  - {fileID: 8300000, guid: d113612b217d0644b931720b34fd7aa8, type: 3}
+  - {fileID: 8300000, guid: 9f77218c3ae06164e89696bbba7a1d94, type: 3}
+  - {fileID: 8300000, guid: adbfb8fdd4ac88b4e906ac5117a34d2f, type: 3}
+  - {fileID: 8300000, guid: 3f54644a372cc8f48922e309af541dd1, type: 3}
+  - {fileID: 8300000, guid: 4e809160db92a6346af33fb3398fb887, type: 3}
+  - {fileID: 8300000, guid: 4785571248a20f04a8462e19940ad006, type: 3}
+  - {fileID: 8300000, guid: ca1f602574be09d44909f066cbf9d5a9, type: 3}
+  - {fileID: 8300000, guid: 4a8f8f4023217934cbeacd2885f647a2, type: 3}
+  - {fileID: 8300000, guid: 7bf36c1e97d2c05439e50faa30c52c6e, type: 3}
   StrikeCount: 10
   TimeLimit: 2000
   BombSize: 1

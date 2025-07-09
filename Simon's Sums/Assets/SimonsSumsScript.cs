@@ -23,7 +23,7 @@ public class SimonsSumsScript : MonoBehaviour {
 
     private Color32 colorStored;
 
-    private IEnumerator[] sequences = new IEnumerator[4];
+    private IEnumerator[] sequences = new IEnumerator[5];
 
     private KMAudio.KMAudioRef _mySound;
 
@@ -105,7 +105,10 @@ public class SimonsSumsScript : MonoBehaviour {
     private string displayText = ""; // Colorblind mode usage
     private string colorText = ""; // Colorblind mode usage
 
-    private bool colorblindMode;
+    private bool colorblindMode; // Colorblind mode activated?
+    private bool autosolving = false; // For TP autosolver
+
+    private float elapsed = 0f; // For solve animation
 
     void Awake() {
     
@@ -140,6 +143,7 @@ public class SimonsSumsScript : MonoBehaviour {
         sequences[1] = StrikeSequence();
         sequences[2] = SolveAnimation();
         sequences[3] = TextAnimation();
+        sequences[4] = TimeFix();
 
         colorblindMode = CBM.ColorblindModeActive;
 
@@ -601,7 +605,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 _mySound.StopSound();
             } else
             {
-                _mySound = Audio.PlaySoundAtTransformWithRef("992229_R-quotMinuitquot", transform);
+                _mySound = Audio.PlaySoundAtTransformWithRef("Ryzmik - Minuit", transform);
             }
             _boredomRepellent = !_boredomRepellent;
         }
@@ -814,7 +818,8 @@ public class SimonsSumsScript : MonoBehaviour {
             if (correctColors != stage + 1)
             {
                 Debug.LogFormat("[Simon's Sums #{0}] One or more inputs were incorrect. The display colors are {1}.", _moduleID, colorResult);
-                Module.HandleStrike();
+
+                if (!autosolving) Module.HandleStrike();
                 
                 StartCoroutine(sequences[0]);
                 StartCoroutine(sequences[1]);
@@ -1084,6 +1089,8 @@ public class SimonsSumsScript : MonoBehaviour {
     {
         yield return new WaitForSeconds(0.5f);
 
+        StartCoroutine(sequences[4]);
+
         for (int j = 0; j < 6; j++)
         {
             colorStored = Buttons[j].GetComponent<MeshRenderer>().material.color;
@@ -1098,7 +1105,7 @@ public class SimonsSumsScript : MonoBehaviour {
             colorStored = Buttons[j].GetComponent<MeshRenderer>().material.color;
             ButtonMaterials[j].material = materials[1];
             Buttons[j].GetComponent<MeshRenderer>().material.color = colorStored;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitUntil(() => elapsed > (float) ((j + 2) * 0.12));
         }
 
         if (Bomb.GetTime() < 60)
@@ -1111,7 +1118,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[j].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[j].material = materials[0];
                 Buttons[j].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)((j + 9.6) * 0.12));
             }
         }
         else
@@ -1124,10 +1131,10 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[j].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[j].material = materials[0];
                 Buttons[j].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)((j + 8) * 0.12));
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitUntil(() => elapsed > 2.52f);
 
             // RYGCBM order 
             for (int j = 0; j < 6; j++)
@@ -1135,7 +1142,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[order.IndexOf("RYGCBM"[j])].material = materials[1];
                 Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)((j + 22) * 0.12));
             }
 
             for (int j = 0; j < 6; j++)
@@ -1143,10 +1150,10 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[order.IndexOf("RYGCBM"[j])].material = materials[0];
                 Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)((j + 28) * 0.12));
             }
 
-            yield return new WaitForSeconds(0.9f);
+            yield return new WaitUntil(() => elapsed > 4.7f);
 
             // Primaries
 
@@ -1157,7 +1164,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color = colorStored;
             }
 
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitUntil(() => elapsed > 5.4f);
 
             for (int j = 0; j < 6; j += 2)
             {
@@ -1175,7 +1182,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 Buttons[order.IndexOf("RYGCBM"[j])].GetComponent<MeshRenderer>().material.color = colorStored;
             }
 
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitUntil(() => elapsed > 6.5f);
 
             for (int j = 1; j < 6; j += 2)
             {
@@ -1194,7 +1201,9 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[(j + 3) % 6].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[(j + 3) % 6].material = materials[1];
                 Buttons[(j + 3) % 6].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+
+                yield return new WaitUntil(() => elapsed > (float)((19 - j + 65) * 0.1));
+
                 colorStored = Buttons[j % 6].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[j % 6].material = materials[0];
                 Buttons[j % 6].GetComponent<MeshRenderer>().material.color = colorStored;
@@ -1212,25 +1221,25 @@ public class SimonsSumsScript : MonoBehaviour {
                     colorStored = Buttons[0].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[0].material = materials[1 - j];
                     Buttons[0].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(8.4 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[1].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[1].material = materials[1 - j];
                     Buttons[1].GetComponent<MeshRenderer>().material.color = colorStored;
                     colorStored = Buttons[5].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[5].material = materials[1 - j];
                     Buttons[5].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(8.52 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[2].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[2].material = materials[1 - j];
                     Buttons[2].GetComponent<MeshRenderer>().material.color = colorStored;
                     colorStored = Buttons[4].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[4].material = materials[1 - j];
                     Buttons[4].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(8.64 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[3].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[3].material = materials[1 - j];
                     Buttons[3].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(8.76 + (4 * j + 8 * i) * 0.12));
                 }
             }
 
@@ -1243,25 +1252,25 @@ public class SimonsSumsScript : MonoBehaviour {
                     colorStored = Buttons[3].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[3].material = materials[1 - j];
                     Buttons[3].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(10.32 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[2].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[2].material = materials[1 - j];
                     Buttons[2].GetComponent<MeshRenderer>().material.color = colorStored;
                     colorStored = Buttons[4].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[4].material = materials[1 - j];
                     Buttons[4].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(10.44 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[1].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[1].material = materials[1 - j];
                     Buttons[1].GetComponent<MeshRenderer>().material.color = colorStored;
                     colorStored = Buttons[5].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[5].material = materials[1 - j];
                     Buttons[5].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(10.56 + (4 * j + 8 * i) * 0.12));
                     colorStored = Buttons[0].GetComponent<MeshRenderer>().material.color;
                     ButtonMaterials[0].material = materials[1 - j];
                     Buttons[0].GetComponent<MeshRenderer>().material.color = colorStored;
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitUntil(() => elapsed > (float)(10.68 + (4 * j + 8 * i) * 0.12));
                 }
             }
 
@@ -1272,10 +1281,10 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[order.IndexOf("RGBCMY"[j])].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[order.IndexOf("RGBCMY"[j])].material = materials[1];
                 Buttons[order.IndexOf("RGBCMY"[j])].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)(12.24 + j * 0.12));
             }
 
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitUntil(() => elapsed > 14f);
 
             // Triangular/Y Shape (Alternating)
 
@@ -1287,7 +1296,7 @@ public class SimonsSumsScript : MonoBehaviour {
                     ButtonMaterials[j].material = materials[(j + i) % 2];
                     Buttons[j].GetComponent<MeshRenderer>().material.color = colorStored;
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)(14.1 + i * 0.11));
             }
             for (int j = 0; j < 6; j++)
             {
@@ -1303,7 +1312,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[5-j].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[5 - j].material = materials[1];
                 Buttons[5 - j].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)(15.3 + j * 0.1));
             }
 
             Module.HandlePass(); // Actually solves
@@ -1317,7 +1326,7 @@ public class SimonsSumsScript : MonoBehaviour {
                     ButtonMaterials[j].material = materials[i % 2];
                     Buttons[j].GetComponent<MeshRenderer>().material.color = colorStored;
                 }
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)(15.9 + i * 0.1));
             }
 
             for (int j = 0; j < 6; j++)
@@ -1325,7 +1334,7 @@ public class SimonsSumsScript : MonoBehaviour {
                 colorStored = Buttons[5 - j].GetComponent<MeshRenderer>().material.color;
                 ButtonMaterials[5 - j].material = materials[0];
                 Buttons[5 - j].GetComponent<MeshRenderer>().material.color = colorStored;
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitUntil(() => elapsed > (float)(18.3 + j * 0.12));
             }
 
         }
@@ -1334,10 +1343,10 @@ public class SimonsSumsScript : MonoBehaviour {
 
     private IEnumerator TextAnimation()
     {
-        switch (UnityEngine.Random.Range(0, 11))
+        switch (UnityEngine.Random.Range(0, 12))
         {
             case 0:
-            solveText = "YOU JUST SOLVED SIMON\'S SUMS!";
+            solveText = "YOU JUST SOLVED SIMON'S SUMS!";
             break;
             case 1:
             solveText = "TOOK YOU LONG ENOUGH... GG";
@@ -1369,6 +1378,9 @@ public class SimonsSumsScript : MonoBehaviour {
             case 10:
             solveText = "SOLVE SOUND: \"MINUIT\" BY RYZMIK";
             break;
+            case 11:
+            solveText = "YOU NOTICED MY SOLVE TEXT... I'M IMPRESSED";
+            break;
         }
 
         for (int i = 0; i < solveText.Length; i++)
@@ -1377,6 +1389,15 @@ public class SimonsSumsScript : MonoBehaviour {
             yield return new WaitForSeconds(0.07f);
             displayText = "";
             yield return new WaitForSeconds(0.07f);
+        }
+    }
+
+    IEnumerator TimeFix()
+    {
+        while (elapsed < 25f)
+        {
+            yield return null;
+            elapsed += Time.deltaTime;
         }
     }
 
@@ -1410,7 +1431,7 @@ public class SimonsSumsScript : MonoBehaviour {
     }
     // Twitch Plays
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} <X> <Y> [Presses the color X (red/green/blue/cyan/magenta/yellow, or r/g/b/c/m/y) when the sum of the timer digits is Y (needs to be an integer in the range 0-14 inclusive)] // !{0} examine [Re-angles the bomb to see the flashes easier]// !{0} stopexamine [Re-angles the bomb to its normal state]";
+    private readonly string TwitchHelpMessage = @"!{0} <X> <Y> [Presses the color X (red/green/blue/cyan/magenta/yellow, or r/g/b/c/m/y) when the sum of the timer digits is Y (needs to be an integer in the range 0-14 inclusive)]";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
@@ -1467,20 +1488,69 @@ public class SimonsSumsScript : MonoBehaviour {
             }
             else yield return "sendtochaterror That color doesn't exist in the module!";
         }
-        else if (parameters.Length == 1)
-        {
-            if (parameters[0] == "examine")
-            {
-                yield return null;
-                yield return "sendtochat Rotating the bomb to top-left!";
-            }
-            else if (parameters[0] == "stopexamine")
-            {
-                yield return null;
-                yield return "sendtochat Rotating the bomb back to center!";
-            }
-            else yield return "sendtochaterror That command doesn't exist!";
-        }
         else yield return "sendtochaterror That command doesn't exist!";
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        Debug.LogFormat("[Simon's Sums #{0}] Autosolving (TP)", _moduleID);
+        autosolving = true;
+        while (stage == 1)
+        {
+            yield return new WaitUntil(() => ((stage != 1) || (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6)) % 5 == yValues[0, submissionColors.Length]));
+            if (stage != 1) break;
+            try
+            {
+                Buttons[order.IndexOf(presses[0][submissionColors.Length].ToString())].OnInteract();
+            }
+            catch
+            {
+                // Sometimes an IndexOutOfRangeException happens for some reason :/
+            }
+        }
+        while (stage == 2)
+        {
+            yield return new WaitUntil(() => ((stage != 2) || (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6)) % 5 == yValues[1, submissionColors.Length]));
+            if (stage != 2) break;
+            try
+            {
+                Buttons[order.IndexOf(presses[1][submissionColors.Length].ToString())].OnInteract();
+            }
+            catch
+            {
+                // Sometimes an IndexOutOfRangeException happens for some reason :/
+            }
+        }
+        while (stage == 3)
+        {
+            while (submissionColors.Length < 3)
+            {
+                yield return new WaitUntil(() => ((submissionColors.Length == 3) || (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6)) % 5 == yValues[2, submissionColors.Length]));
+                if (submissionColors.Length == 3) break;
+                try
+                {
+                    Buttons[order.IndexOf(presses[2][submissionColors.Length].ToString())].OnInteract();
+                }
+                catch
+                {
+                    // Sometimes an IndexOutOfRangeException happens for some reason :/
+                }
+            }
+            while (submissionColors.Length == 3)
+            {
+                yield return new WaitUntil(() => ((submissionColors.Length != 3) || (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6)) == yValues[2, 3]));
+                if (submissionColors.Length != 3) break;
+                try
+                {
+                    Buttons[order.IndexOf(presses[2][3])].OnInteract();
+                }
+                catch
+                {
+                    // Sometimes an IndexOutOfRangeException happens for some reason :/
+                }
+            }
+            yield return new WaitForSeconds(1);
+            if (_moduleSolved) break;
+        }
     }
 }

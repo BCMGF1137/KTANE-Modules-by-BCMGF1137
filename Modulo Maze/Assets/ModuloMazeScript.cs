@@ -17,8 +17,8 @@ public class ModuloMazeScript : MonoBehaviour {
     public KMBombInfo Bomb;
     public KMBombModule Module;
 
-    public Material[] lightMaterials;
-    public Material[] darkMaterials;
+    public MeshRenderer[] lightMaterials;
+    public MeshRenderer[] darkMaterials;
     public TextMesh[] displays;
     public KMSelectable[] arrows;
 
@@ -312,13 +312,13 @@ public class ModuloMazeScript : MonoBehaviour {
 
         // Determining colors
 
-        foreach (Material m in lightMaterials)
+        foreach (MeshRenderer m in lightMaterials)
         {
-            m.color = Color.HSVToRGB(H, S, V);
+            m.material.color = Color.HSVToRGB(H, S, V);
         }
-        foreach (Material m in darkMaterials)
+        foreach (MeshRenderer m in darkMaterials)
         {
-            m.color = Color.HSVToRGB(H, S, V / 3);
+            m.material.color = Color.HSVToRGB(H, S, V / 3);
         }
         foreach (TextMesh t in displays)
         {
@@ -634,21 +634,22 @@ public class ModuloMazeScript : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-        darkMaterials[0].SetTextureOffset("_MainTex", new Vector2((float)(Time.time / 1.9), (float)Math.Sin(Time.time / 5.3)));
-        darkMaterials[1].SetTextureOffset("_MainTex", new Vector2((float)Math.Sin(Time.time / 2.2), (float)Math.Cos(Time.time / 4.4)));
-        
+    void Update () { 
+        darkMaterials[0].material.SetTextureOffset("_MainTex", new Vector2((float)(Time.time / 1.9), (float)Math.Sin(Time.time / 5.3)));
+        darkMaterials[1].material.SetTextureOffset("_MainTex", new Vector2((float)Math.Sin(Time.time / 2.2), (float)Math.Cos(Time.time / 4.4)));
+        darkMaterials[2].material.SetTextureOffset("_MainTex", new Vector2((float)Math.Sin(Time.time / 8.3) * 2, (float)Math.Cos(Time.time / 7.3) * 2));
+
         if (moduleActivated)
         {
             //Debug.LogFormat("[Modulo Maze #{0}] The current color: {1} {2} {3}.", _moduleID, lightMaterials[0].color.r, lightMaterials[0].color.g, lightMaterials[0].color.b);
             //Debug.LogFormat("[Modulo Maze #{0}] The current color: {1} {2} {3}.", _moduleID, R, G, B);
-            foreach (Material m in lightMaterials)
+            foreach (MeshRenderer m in lightMaterials)
             {
-                m.color = new Color32((byte)currentR, (byte)currentG, (byte)currentB, 255);
+                m.material.color = new Color32((byte)currentR, (byte)currentG, (byte)currentB, 255);
             }
-            foreach (Material m in darkMaterials)
+            foreach (MeshRenderer m in darkMaterials)
             {
-                m.color = new Color32((byte)(currentR / 3), (byte)(currentG / 3), (byte)(currentB / 3), 255);
+                m.material.color = new Color32((byte)(currentR / 3), (byte)(currentG / 3), (byte)(currentB / 3), 255);
             }
             foreach (TextMesh t in displays)
             {

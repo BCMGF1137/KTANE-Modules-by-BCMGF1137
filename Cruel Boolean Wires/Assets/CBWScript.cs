@@ -58,7 +58,9 @@ public class CBWScript : MonoBehaviour {
 
     private bool mechChk = false;
 
+    private bool isActivated = false;
     private bool isAnimating = false; // Used to stop stuff
+    private bool moduleSolved = false;
     private bool[] wireStates = Enumerable.Range(0, 20).Select(_ => false).ToArray();
 
     // Things for booleans
@@ -75,7 +77,7 @@ public class CBWScript : MonoBehaviour {
         "arsGoetiaIdentification", "miiIdentification", "xelCustomerIdentification", "spongebobBirthdayIdentification",
     "DrDoctorModule", "Phosphorescence", "phones"};
     private string[] ucrs = { "WordSearchModule", "ultimateCipher", "Alphabetize", "greenArrowsModule", "yellowArrowsModule", "sphere"
-    , "unfairsRevenge", "WhosOnFirst", "WhatsOnSecond", "blueArrowsModule", "orangeCipher" };
+    , "unfairsRevenge", "WhosOnFirst", "WhatsOnSecond", "blueArrowsModule", "orangeCipher", "unfairCipher", "romanArtModule"};
 
     /* Operators (I am suffocating right now)
     The setup looks like this:
@@ -98,7 +100,7 @@ public class CBWScript : MonoBehaviour {
         "fftfutttt", "fuuuttutt", "tfftufttt", "tttfutfft",
         "uffuffttt", "uutfftfft", "fuuuuuuut", "uttfutffu",
         "ufftufttu", "ffufututt", "ttutufuff", "tutufutut",
-        "uftfuftfu", "fuffututu", "tufutufut", "futufutuf"
+        "uftfuftfu", "ufufututu", "tufutufut", "futufutuf"
     };
 
     private string[] submissions = {
@@ -182,8 +184,14 @@ public class CBWScript : MonoBehaviour {
         wireMech.transform.localPosition = new Vector3(0f, 0.045f, 0.192f); // default Y = 0.145
         coverPlane.transform.localPosition = new Vector3(0f, 0.145f, 0.192f); // default X = 0.8144
         coverPlane.transform.localScale = new Vector3(0.1616f, 1f, 0.12f); // default X = 0.0016
-        Module.OnActivate += Generate;
+        Module.OnActivate += Initialize;
 	}
+
+    void Initialize()
+    {
+        isActivated = true;
+        Generate();
+    }
 
     void DisplayPress(KMSelectable disp)
     {
@@ -193,7 +201,7 @@ public class CBWScript : MonoBehaviour {
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         disp.AddInteractionPunch(0.1f);
-        if (!isAnimating)
+        if (!isAnimating && isActivated)
         {
             isAnimating = true;
             StartCoroutine(HideWires());
@@ -253,6 +261,7 @@ public class CBWScript : MonoBehaviour {
                         }
                         else // Module solved
                         {
+                            moduleSolved = true;
                             Debug.LogFormat("[Cruel Boolean Wires #{0}] >>> FIVE STAGES PASSED; MODULE SOLVED", _moduleID);
                             Audio.PlaySoundAtTransform("Awesome", transform);
 
@@ -285,8 +294,8 @@ public class CBWScript : MonoBehaviour {
                                     break;
                                 case 5:
                                     displayTexts[0].text = "BY";
-                                    displayTexts[1].text = "BL";
-                                    displayTexts[2].text = "UE";
+                                    displayTexts[1].text = "BC";
+                                    displayTexts[2].text = "MG";
                                     break;
                             }
                             foreach (var wire in wires)
@@ -365,7 +374,7 @@ public class CBWScript : MonoBehaviour {
                     }
                     else // Strike
                     {
-                        Debug.LogFormat("[Cruel Boolean Wires #{0}] >>> INCORRECT SUBMISSION; STRIKE AND RESET", _moduleID);
+                        Debug.LogFormat("[Cruel Boolean Wires #{0}] >>> INCORRECT SUBMISSION; MODULE STRIKED", _moduleID);
                         Module.HandleStrike();
                         if (stage != 5)
                         {
@@ -461,7 +470,7 @@ public class CBWScript : MonoBehaviour {
                         displayTexts[0].text = "";
                         displayTexts[1].text = "";
                         displayTexts[2].text = "";
-                        stage = 0;
+                        stage -= 1;
 
                         yield return new WaitForSeconds(0.3f);
 
@@ -725,23 +734,22 @@ public class CBWScript : MonoBehaviour {
             }
 
             // Value 6
-            if ((Bomb.GetModuleNames().Contains("Latin Hypercube") && !Bomb.GetModuleNames().Contains("Mischmodul"))
-            == (Bomb.GetModuleNames().Contains("TetraVex") && !Bomb.GetModuleNames().Contains("Mischboozl")))
+            if (Bomb.GetPortCount()==0)
                 booleanValues[6].setValue("F");
-            else if (Bomb.GetModuleNames().Contains("Latin Hypercube") && !Bomb.GetModuleNames().Contains("Mischmodul"))
+            else if (Bomb.GetSolvedModuleIDs().Count() % Bomb.GetPortCount() == 0)
                 booleanValues[6].setValue("U");
             else booleanValues[6].setValue("T");
 
             switch (booleanValues[6].toString())
             {
                 case "T":
-                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is TRUE because TetraVex is present while Mischboozl is not.", _moduleID);
+                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is TRUE because the number of solved modules ({1}) is NOT a multiple of the number of ports.", _moduleID, Bomb.GetSolvedModuleNames().Count());
                     break;
                 case "F":
-                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is FALSE because the boolean of the \"Unknown\" column matches the boolean of the \"True\" column.", _moduleID);
+                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is FALSE because there are no ports.", _moduleID);
                     break;
                 case "U":
-                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is UNKNOWN because Latin Hypercube is present while Mischmodul is not.", _moduleID);
+                    Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value 6 is UNKNOWN because the number of solved modules ({1}) is a multiple of the number of ports.", _moduleID, Bomb.GetSolvedModuleNames().Count());
                     break;
             }
 
@@ -818,7 +826,7 @@ public class CBWScript : MonoBehaviour {
                 chk = false;
                 for (int i = 2; i < 90; i++)
                 {
-                    if (temp % i == 0)
+                    if (temp % i == 0 && temp != i)
                     {
                         chk = true;
                         break;
@@ -845,7 +853,7 @@ public class CBWScript : MonoBehaviour {
                 if (vanillas.Contains(Bomb.GetModuleIDs()[i])) temp2++;
             }
             chk = false;
-            Debug.LogFormat("[Cruel Boolean Wires #{0}] (There is/are" + temp + " extreme module(s) and " + temp2 + " vanilla module(s).)", _moduleID);
+            Debug.LogFormat("[Cruel Boolean Wires #{0}] (There is/are " + temp + " extreme module(s) and " + temp2 + " vanilla module(s).)", _moduleID);
             foreach (int i in lucasNumbers) {
                 if (Math.Abs(temp * temp2 - i) <= 20) chk = true;
             }
@@ -853,17 +861,17 @@ public class CBWScript : MonoBehaviour {
             if (temp * temp2 > 600)
             {
                 booleanValues[11].setValue("U");
-                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is UNKNOWN because the resulting number (" + temp + ") is outside the scope of this module's Lucas number checker.", _moduleID);
+                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is UNKNOWN because the resulting number (" + (temp * temp2) + ") is outside the scope of this module's Lucas number checker.", _moduleID);
             }
             else if (chk)
             {
                 booleanValues[11].setValue("T");
-                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is TRUE because the resulting number (" + temp + ") is within 20 of a Lucas number.", _moduleID);
+                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is TRUE because the resulting number (" + (temp * temp2) + ") is within 20 of a Lucas number.", _moduleID);
             }
             else
             {
                 booleanValues[11].setValue("F");
-                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is FALSE because the resulting number (" + temp + ") is not within 20 of a Lucas number.", _moduleID);
+                Debug.LogFormat("[Cruel Boolean Wires #{0}] > Value B is FALSE because the resulting number (" + (temp * temp2) + ") is not within 20 of a Lucas number.", _moduleID);
 
             }
 
@@ -1204,13 +1212,15 @@ public class CBWScript : MonoBehaviour {
 
             // Value S
             temp2 = Bomb.GetModuleNames().Count(name => name.Contains("Simon"));
+            //temp2 = 7;
             Debug.LogFormat("[Cruel Boolean Wires #{0}] (There are " + temp2 + " modules with the word \"Simon\" in them.)", _moduleID);
             chk = false;
+            if (temp2 < 2) chk = true;
             for (int i = 2; i < 400; i++)
             {
-                if (temp % i == 0)
+                if (temp2 % i == 0 && temp2 != i)
                 {
-                    chk = true;
+                    chk = true; // If chk, the number is not prime
                     break;
                 }
             }
@@ -1524,8 +1534,8 @@ public class CBWScript : MonoBehaviour {
 
         Debug.LogFormat("[Cruel Boolean Wires #{0}] The left character is {1}, and the right character is {2}.", _moduleID, leftLetter, rightLetter);
 
-        leftBool = booleanValues["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(leftLetter)];
-        rightBool = booleanValues["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(rightLetter)];
+        leftBool.setValue(booleanValues["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(leftLetter)].toString());
+        rightBool.setValue(booleanValues["0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(rightLetter)].toString());
 
         Debug.LogFormat("[Cruel Boolean Wires #{0}] Without unary operators, {1} evaluates to {3}, and {2} evaluates to {4}.", _moduleID, leftLetter, rightLetter, leftBool.toWord(), rightBool.toWord());
 
@@ -1543,6 +1553,8 @@ public class CBWScript : MonoBehaviour {
 
         Debug.LogFormat("[Cruel Boolean Wires #{0}] With unary operators, {1} evaluates to {3}, and {2} evaluates to {4}.", _moduleID, leftBoolean, rightBoolean, leftBool.toWord(), rightBool.toWord());
         Debug.LogFormat("[Cruel Boolean Wires #{0}] The resulting booleans are {1}{2}. We want the booleans to return with {3}.", _moduleID, leftBool.toString(), rightBool.toString(), stageColor.toString());
+
+        // Finding valid operators
 
         temp = startPos - 1;
         temp2 = "FUT".IndexOf(rightBool.toString()) * 3 + "FUT".IndexOf(leftBool.toString());
@@ -1727,13 +1739,13 @@ public class CBWScript : MonoBehaviour {
                     value = "" + "TFU"[("TFU".IndexOf(value) + 2) % 3];
                     break;
                 case "!": // T swaps with F
-                    if (value != "U") value = "" + "TF"[("TF".IndexOf(value) + 1) % 2];
+                    if (! value.Equals("U")) value = "" + "FT"["TF".IndexOf(value)];
                     break;
                 case "!+": // F swaps with U
-                    if (value != "T") value = "" + "UF"[("UF".IndexOf(value) + 1) % 2];
+                    if (!value.Equals("T")) value = "" + "FU"["UF".IndexOf(value)];
                     break;
                 case "!-": // U swaps with T
-                    if (value != "F") value = "" + "UT"[("UT".IndexOf(value) + 1) % 2];
+                    if (!value.Equals("F")) value = "" + "TU"["UT".IndexOf(value)];
                     break;
             }
         }
@@ -1778,17 +1790,14 @@ public class CBWScript : MonoBehaviour {
             yield return null;
             if (parameters[1].EqualsIgnoreCase("left"))
             {
-                yield return "sendtochat Pressing left...";
                 displays[0].OnInteract();
             }
             else if (parameters[1].EqualsIgnoreCase("middle"))
             {
-                yield return "sendtochat Pressing middle...";
                 displays[1].OnInteract();
             }
             else if (parameters[1].EqualsIgnoreCase("right"))
             {
-                yield return "sendtochat Pressing right...";
                 displays[2].OnInteract();
             }
             else yield return "sendtochaterror That display doesn't exist!";
@@ -1797,7 +1806,6 @@ public class CBWScript : MonoBehaviour {
         {
             yield return null;
             int wireToCut = 0;
-            yield return "sendtochat Cutting wires...";
             for (int i = 1; i < parameters.Length; i++)
             {
                 if (isWireValid(parameters[i]))
@@ -1811,5 +1819,23 @@ public class CBWScript : MonoBehaviour {
         else yield return "sendtochaterror That command doesn't exist!";
     }
 
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        Debug.LogFormat("[Cruel Boolean Wires #{0}] Autosolving...", _moduleID);
+        yield return null;
+        DisplayPress(displays[1]);
+        yield return new WaitForSeconds(0.5f);
+        yield return new WaitUntil(() => !isAnimating);
+        while (!moduleSolved)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                if (solution[i] == '0')
+                    WireCut(wires[i]);
+            }
+            DisplayPress(displays[0]);
+            yield return new WaitUntil(() => (!isAnimating || moduleSolved));
+        }
+    }
     // NOTE TO AXODEAU: If you make Selectaholic v2 or something, this module contains 23 selectables :)
 }

@@ -20,4 +20,4 @@ MonoBehaviour:
     Navigate a maze such that a displayed number reaches zero at a goal position.'
   version: 0.0.0
   outputFolder: build
-  previewImage: {fileID: 2800000, guid: 45a0f435f1c63564f828d3f89b1eddb8, type: 3}
+  previewImage: {fileID: 2800000, guid: 7cd84b248a284734d99d676faecc0182, type: 3}
