@@ -1,0 +1,10 @@
+{
+  "name": "S-Editor",
+  "references": [
+    "S"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

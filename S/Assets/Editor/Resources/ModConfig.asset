@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: S
+  title: S
+  author: BCMGF1137
+  description: '~~IT''S BEEN ONE YEAR SINCE I RELEASED D, WHAT DID YOU EXPECT?!?!~~
+
+
+    Determine a sequence colored buttons to press over 3 stages with increasingly
+    complicated steps.
+
+
+    ---
+
+
+    I intended to release this on August 1 of 2025 but it took a while to optimize
+    the mod.
+
+
+    To be fair though, most of my manuals from 2024 were way too tedious, and I was
+    recently warned about the concept of "objectively bad modules". I mean, I hope
+    that this module isn''t *too* bad (but it probably is)...
+
+
+    I made the sounds in FL Studio Mobile. Oh yeah, and I didn''t forget about TP
+    support.
+
+
+    Enjoy this module (it''s the lengthiest one I''ve made so far)!
+
+
+    Last thing, this is the 2nd time I had to upload a mod before going somewhere
+    on vacation. (Ironically, the first time was with the other one-letter mod I made,
+    D.)'
+  version: 0.0.0
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: 84150949bc0dbd54db46246b5844a5f9, type: 3}
