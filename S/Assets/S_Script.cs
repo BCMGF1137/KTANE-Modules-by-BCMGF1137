@@ -756,7 +756,7 @@ public class S_Script : MonoBehaviour
                 S += Math.Max(S % 10, S / 10);
                 break;
             case "Green 3": // Subtract the sum of the digits
-                S += (S % 10) - (S / 10);
+                S -= (S % 10) + (S / 10);
                 break;
             // Jade
             case "Jade 0": // Add twice the digital root
