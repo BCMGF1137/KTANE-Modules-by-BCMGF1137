@@ -55,6 +55,7 @@ public class TerminologyScript : MonoBehaviour {
      3. The module finished querying the Repository of Manual Pages ("repo").
          */
     private bool moduleActivated = false;
+    private bool generated = false;
 
     private string[] startupTexts = new string[] // What you see before the module generates
     {
@@ -92,6 +93,8 @@ public class TerminologyScript : MonoBehaviour {
 
     private KTANEModule[] _modules;
     private Texture2D iconSprite;
+
+    private string stageText = "";
 
     private void Awake()
     {
@@ -559,12 +562,15 @@ public class TerminologyScript : MonoBehaviour {
         moduleText.text = "";
         yield return new WaitForSeconds(1f);
         StartCoroutine(GenerateText(startupTexts.PickRandom()));
+        yield return new WaitUntil(() => generated);
+        yield return new WaitForSeconds(1f);
         yield return new WaitUntil(() => moduleActivated && repoDataRetrievalCompleted && iconRetrievalCompleted);
+        StartCoroutine(GenerateStage());
     }
 
     private IEnumerator GenerateText(string generatedText)
     {
-        Debug.LogFormat("[Terminology #{0}] Testing module.", _moduleID);
+        //Debug.LogFormat("[Terminology #{0}] Testing module.", _moduleID);
         SetWordWrappedText(ref generatedText);
         Color32 t = moduleText.color;
         for (byte i = 255; i > 0; i-=15)
@@ -580,6 +586,14 @@ public class TerminologyScript : MonoBehaviour {
             if (i % 2 == 0) Audio.PlaySoundAtTransform("Blue's Lines", transform);
             yield return new WaitForSeconds(1f/30);
         }
+        generated = true;
+        yield break;
+    }
+    private IEnumerator GenerateStage()
+    {
+        KeyValuePair<string, string> word = definitions.PickRandom();
+        stageText = word.Value;
+        Debug.LogFormat("[Terminology #{0}] The module's text is: \"{1}\".", _moduleID, stageText);
         yield break;
     }
 
