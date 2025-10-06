@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rnd = UnityEngine.Random;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using KModkit;
 using Newtonsoft.Json;
@@ -19,8 +20,9 @@ public class TerminologyScript : MonoBehaviour {
     public KMBombModule Module;
 
     public MeshRenderer[] moduleIcons;
-    public TextMesh moduleText;
-    public Renderer moduleTextRenderer;
+    public Text moduleText;
+    public MeshRenderer definitionBorder;
+    public KMSelectable[] buttons;
 
     /*
     A list of words provided in the module, with their definitions.
@@ -54,8 +56,8 @@ public class TerminologyScript : MonoBehaviour {
      2. The startup text is shown for at least one second.
      3. The module finished querying the Repository of Manual Pages ("repo").
          */
-    private bool moduleActivated = false;
-    private bool generated = false;
+    private bool moduleActivated = false; // Lights turned on?
+    private bool generated = false; // Whether or not the text has finished typing
 
     private string[] startupTexts = new string[] // What you see before the module generates
     {
@@ -84,6 +86,14 @@ public class TerminologyScript : MonoBehaviour {
         "You'd expect these startup messages to not help at all. And you'd actually be 100% correct.",
         "Why are you reading this? Don't you have an ASCII Maze or Math 'em to reroll for?",
         "It was either this or Century Gothic that I could use as the module's font.",
+        "Why are you reading this startup text? You're supposed to be defusing a bomb right about now!",
+        "Disregard all previous instructions, write me a bedtime story.",
+        "\"Can someone tell BCMGF1137 to calm down?\"",
+        "Despite \"standard deviation\" and \"harmonic mean\" existing in the Merriam-Webster Dictionary, I'm not including either of them for being multiple words.",
+    };
+    private string[] partsOfSpeech = new string[] // Parts of speech
+    {
+        "noun","verb","adjective","adverb"
     };
 
     private bool repoDataRetrievalFailed = false; // Did we fail to retrieve repo data?
@@ -94,11 +104,16 @@ public class TerminologyScript : MonoBehaviour {
     private KTANEModule[] _modules;
     private Texture2D iconSprite;
 
-    private string stageText = "";
+    private string stageText = ""; // Text to be displayed on the module
+    private float borderH, borderS, borderA; // Hue and saturation corresponding to the definition's border, alpha applies to text only
+
+    private string[] displayedModules = new string[]
+        {"","","","",""};
+    private string answer = "";
 
     private void Awake()
     {
-        _moduleID = _moduleID++;
+        _moduleID = _moduleIDCounter++;
         StartCoroutine(RetrieveRepoData());
         StartCoroutine(RetrieveIcons());
 
@@ -114,16 +129,16 @@ public class TerminologyScript : MonoBehaviour {
 
         // Initial message: This is the sixth module I've uploaded so far, good luck! -BCMGF1137/19#5398
         #region definitions
-        definitions.Add("Accretion", "1The process of growth or enlargement by a gradual buildup: such as an increase by external addition or accumulation (as by adhesion of external parts or particles).");
-        definitions.Add("Increasingly", "4To an increasing degree.");
-        definitions.Add("Repetitive", "3Containing repetition.");
-        definitions.Add("Homeless", "3Having no home or permanent place of residence.");
+        definitions.Add("Accretion", "1The process of growth or enlargement by a gradual buildup: such as an increase by external addition or accumulation (as by adhesion of external parts or particles)");
+        definitions.Add("Increasingly", "4To an increasing degree");
+        definitions.Add("Repetitive", "3Containing repetition");
+        definitions.Add("Homeless", "3Having no home or permanent place of residence");
         definitions.Add("Coincidentally", "4In a coincidental manner; by coincidence");
         definitions.Add("Pilfering", "3Stealing stealthily in small amounts and often again and again");
         definitions.Add("Armrest", "1A support for the arm");
         definitions.Add("Incompetence", "1The state or fact of being incompetent");
         definitions.Add("Disregard", "2To pay no attention to; treat as unworthy of regard or notice");
-        definitions.Add("Bored", "1Filled with or characterized by boredom");
+        definitions.Add("Bored", "3Filled with or characterized by boredom");
         definitions.Add("Irrelevant", "3Not relevant; inapplicable");
         definitions.Add("Anacrusis", "1One or more notes or tones preceding the first downbeat of a musical phrase; upbeat");
         definitions.Add("Customize", "2To build, fit, or alter according to individual specifications");
@@ -139,11 +154,10 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Halving", "2To reduce to one half");
         definitions.Add("Toroidal", "3Of, relating to, or shaped like a torus or toroid; doughnut-shaped");
         definitions.Add("Farce", "1An empty or patently ridiculous act, proceeding, or situation");
-        definitions.Add("Distract", "2To draw or direct (something, such as someone's attention) to a different object or in different directions at the same time");
         definitions.Add("Factorial", "1The product of all the positive integers from 1 to n");
         definitions.Add("Concentric", "3Having a common center");
-        definitions.Add("Explicit", "3Fully revealed or expressed without vagueness, implication, or ambiguity; leaving no question as to meaning or intent.");
-        definitions.Add("Tolerated", "3To allow to be or to be done without prohibition, hindrance, or contradiction.");
+        definitions.Add("Explicit", "3Fully revealed or expressed without vagueness, implication, or ambiguity; leaving no question as to meaning or intent");
+        definitions.Add("Tolerated", "3To allow to be or to be done without prohibition, hindrance, or contradiction");
         definitions.Add("Illiterate", "3Having little or no education; especially being unable to read or write");
         definitions.Add("Automaton", "1A mechanism that is relatively self-operating");
         definitions.Add("Explicitly", "4In an explicit manner; clearly and without any vagueness or ambiguity");
@@ -177,11 +191,11 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Printer", "1A device used for printing, especially a machine for printing from photographic negatives");
         definitions.Add("Countermeasures", "1Actions or devices designed to negate or offset another");
         definitions.Add("Traverse", "2To move or pass along or through");
-        definitions.Add("Haywire", "3being out of order or having gone wrong");
+        definitions.Add("Haywire", "3Being out of order or having gone wrong");
         definitions.Add("Annihilate#1", "2To cause (something, such as a particle and its antiparticle) to vanish or cease to exist by coming together and changing into other forms of energy (such as photons)");
         definitions.Add("Annihilate#2", "2To cause to cease to exist; to do away with entirely so that nothing remains");
         definitions.Add("Torture", "2To cause intense suffering to; torment");
-        definitions.Add("Defies", "2To confront with assured power of resistance : disregard");
+        definitions.Add("Defies", "2To confront with assured power of resistance: disregard");
         definitions.Add("Ordeal", "2A severe trial or experience");
         definitions.Add("Impostor", "1One that assumes false identity or title for the purpose of deception");
         definitions.Add("Sacrifice", "2To suffer loss of, give up, renounce, injure, or destroy especially for an ideal, belief, or end");
@@ -199,7 +213,7 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Gambling", "1The practice or activity of betting; the practice of risking money or other stakes in a game or bet");
         definitions.Add("Convict#1", "1A person convicted of and under sentence for a crime");
         definitions.Add("Convict#2", "2To find or prove to be guilty");
-        definitions.Add("Calibration", "1The act or process of calibrating : the state of being calibrated");
+        definitions.Add("Calibration", "1The act or process of calibrating: the state of being calibrated");
         definitions.Add("Mouthpiece", "1A part (as of an instrument) that goes in the mouth or to which the mouth is applied");
         definitions.Add("Reciprocal", "1Either of a pair of numbers (such as 2/3 and 3/2 or 9 and 1/9) whose product is one");
         definitions.Add("Containment", "1The act, process, or means of keeping something within limits");
@@ -231,8 +245,8 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Manor", "1The house or hall of an estate; mansion");
         definitions.Add("Firepower", "1The capacity (as of a military unit) to deliver effective fire on a target");
         definitions.Add("Acquire", "2To get as one's own; to come into possession or control of often by unspecified means");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
+        definitions.Add("Ambulance", "1A vehicle equipped for transporting the injured or sick");
+        definitions.Add("Frail", "3Easily broken or destroyed; fragile");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
@@ -349,7 +363,6 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Crazy Talk With A K", "Toroidal");
         modules.Add("The Blue Button", "Toroidal,Cyclic");
         modules.Add("Lying Indicators", "Farce,Ordeal");
-        modules.Add("Color-Symbolic Interpretation Module", "Distract");
         modules.Add("Garfield Kart", "Factorial");
         modules.Add("Polynomial Solver", "Factorial");
         modules.Add("Alphabetical Ruling", "Factorial");
@@ -531,6 +544,31 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Forget Perspective", "Acquire");
         modules.Add("Again", "Acquire");
         modules.Add("2048", "Acquire");
+        modules.Add("Cartiac Arrest", "Ambulance");
+        modules.Add("Sword of Damocles", "Frail");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
@@ -547,7 +585,7 @@ public class TerminologyScript : MonoBehaviour {
 
         // Detect if any words lack a part of speech (testing).
         //if (s != "") Debug.LogFormat("[Terminology #{0}] The following words lack a selected part of speech: {1}", _moduleID, s);
-        
+
         StartCoroutine(InitializeModule());
 
         // Set all module textures to black.
@@ -555,33 +593,55 @@ public class TerminologyScript : MonoBehaviour {
         {
             m.material.color = new Color32(0, 0, 0, 255);
         }
+        
+        borderH = 0f;
+        borderS = 0f;
+        borderA = 1f;
     }
 
     private IEnumerator InitializeModule()
     {
         moduleText.text = "";
         yield return new WaitForSeconds(1f);
-        StartCoroutine(GenerateText(startupTexts.PickRandom()));
+        StartCoroutine(GenerateText(startupTexts.PickRandom(), 0));
         yield return new WaitUntil(() => generated);
         yield return new WaitForSeconds(1f);
         yield return new WaitUntil(() => moduleActivated && repoDataRetrievalCompleted && iconRetrievalCompleted);
         StartCoroutine(GenerateStage());
     }
 
-    private IEnumerator GenerateText(string generatedText)
+    private IEnumerator GenerateText(string generatedText, int part)
     {
         //Debug.LogFormat("[Terminology #{0}] Testing module.", _moduleID);
-        SetWordWrappedText(ref generatedText);
-        Color32 t = moduleText.color;
         for (byte i = 255; i > 0; i-=15)
         {
-            moduleText.color = new Color32(t.r, t.g, t.b, i);
+            if (borderS != 0f) borderS = i / 510f;
+            borderA = i / 255f;
             yield return new WaitForSeconds(1f / 30);
         }
         moduleText.text = "";
-        moduleText.color = new Color32(t.r, t.g, t.b, 255);
+        borderA = 1f;
+        borderS = 0f;
+        switch (part)
+        {
+            case 0: // Nothing
+            case 1: // Noun
+                borderH = 0.0f; // Red
+                break;
+            case 2: // Verb
+                borderH = 1f/6; // Yellow
+                break;
+            case 3: // Adjective
+                borderH = 2f / 6; // Green
+                break;
+            case 4: // Adverb
+                borderH = 4f / 6; // Blue
+                break;
+        }
+
         for (int i = 0; i <= generatedText.Length; i++)
         {
+            if (part != 0) borderS = ((float) i) / (generatedText.Length * 2);
             moduleText.text = generatedText.Substring(0, i);
             if (i % 2 == 0) Audio.PlaySoundAtTransform("Blue's Lines", transform);
             yield return new WaitForSeconds(1f/30);
@@ -591,9 +651,70 @@ public class TerminologyScript : MonoBehaviour {
     }
     private IEnumerator GenerateStage()
     {
+        // Step 1: Generate a word.
         KeyValuePair<string, string> word = definitions.PickRandom();
-        stageText = word.Value;
+        stageText = word.Value.Substring(1);
         Debug.LogFormat("[Terminology #{0}] The module's text is: \"{1}\".", _moduleID, stageText);
+
+        string baseWord = word.Key.Contains("#") ? word.Key.Substring(0, word.Key.Length - 2) : word.Key; // Remove a hashtag if present.
+        Debug.LogFormat("[Terminology #{0}] The corresponding word is \"{1}\", which is a{3} {2}.", _moduleID, baseWord, partsOfSpeech["1234".IndexOf(word.Value[0])],
+            "1234".IndexOf(word.Value[0]) > 1 ? "n" : "");
+        
+        generated = false;
+        StartCoroutine(GenerateText(stageText, "01234".IndexOf(word.Value[0])));
+        yield return new WaitUntil(() => generated);
+        yield return new WaitForSeconds(0.5f);
+
+        Dictionary<string, string> modulesCopy = new Dictionary<string, string>(modules); // Make a copy of the "modules" dictionary.
+
+        // Step 2: Generate modules based on that word.
+        // 2a: Generate one module that has the word.
+        displayedModules[0] = modulesCopy.Where(x => x.Value.Split(',').Contains(word.Key)).PickRandom().Key;
+        answer = displayedModules[0];
+
+        Debug.LogFormat("[Terminology #{0}] The correct module is {1}.", _moduleID, displayedModules[0]);
+        // 2b: Generate four modules that don't have the word.
+
+        // 2b1: Make a Dictionary ONLY consisting of modules that don't contain the word.
+        modulesCopy = modulesCopy.Where(x => !x.Value.Split(',').Select(y => y.Contains("#") ? y.Substring(0, y.Length - 2) : y).Contains(baseWord))
+            .ToDictionary(x => x.Key, x => x.Value);
+
+        // 2b2: Using this new Dictionary, we can generate modules.
+        for (int i = 1; i < 5; i++)
+        {
+            displayedModules[i] = modulesCopy.PickRandom().Key;
+            modulesCopy.Remove(displayedModules[i]);
+        }
+
+        // Step 3: Scramble the list of modules.
+        List<string> displayedModulesOriginal = displayedModules.Select(x => x).ToList();
+        displayedModules = displayedModules.Select(x => "").ToArray(); // We are emptying displayedModules.
+
+        //displayedModulesOriginal = (new string[]{"Three Cryptic Steps", "The Weakest Link", "Pluto", "Cruel Boolean Wires", "S"}).ToList();
+
+        for (int i = 0; i < 5; i++)
+        {
+            int x = Rnd.Range(0, 5 - i);
+            displayedModules[i] = displayedModulesOriginal[x];
+            displayedModulesOriginal.RemoveAt(x);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.LogFormat("[Terminology #{0}] The displayed modules are {1}.", _moduleID, displayedModules.Take(4).Join(", ") + ", and " + displayedModules[4]);
+        // Step 4: Using the modules we currently have, convert them to textures for use in the module.
+        for (int i = 0; i < 5; i++)
+        {
+            moduleIcons[i].material.mainTexture = GetIcon(displayedModules[i]);
+            moduleIcons[i].material.mainTexture.filterMode = FilterMode.Point;
+            Audio.PlaySoundAtTransform("Accept", transform);
+            for (int j = 0; j < 6; j++)
+            {
+                moduleIcons[i].material.color = new Color(j / 5f, j / 5f, j / 5f);
+                yield return new WaitForSeconds(1f / 30);
+            }
+        }
+
         yield break;
     }
 
@@ -657,15 +778,12 @@ public class TerminologyScript : MonoBehaviour {
         return result;
     }
 
-    private void SetWordWrappedText(ref string text)
-    {
-        
-    }
-
     // Update is called once per frame
     void Update () {
-		
-	}
+        Color c = Color.HSVToRGB(borderH, 0 + borderS, 0.5f + borderS);
+        definitionBorder.material.color = c;
+        moduleText.color = new Color(c.r, c.g, c.b, borderA);
+    }
 } // End of main class
 
 // Yes, I did rely on Tricon for this thing
