@@ -4,5 +4,8 @@ This is where I'll post all of my modules from Keep Talking and Nobody Explodes.
 
 Current mods:
 
-D (DModule) - Update 4 (Final Update)
-Simon's Sums (SimonsSums) - Update 1
+D (DModule) - 08/01/2024
+Simon's Sums (SimonsSums) - 11/04/2024
+Cruel Boolean Wires (CruelBooleanWires) - 02/02/2025
+Modulo Maze (ModuloMaze) - 05/17/2025
+S (S) - 08/16/2025

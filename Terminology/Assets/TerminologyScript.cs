@@ -23,7 +23,10 @@ public class TerminologyScript : MonoBehaviour {
     public Text moduleText;
     public MeshRenderer definitionBorder;
     public KMSelectable[] buttons;
+    public MeshRenderer[] stageLEDs;
+    public Material[] stageMaterials;
 
+    public Texture2D[] defaultIcons; // Icons built into the module.
     /*
     A list of words provided in the module, with their definitions.
     
@@ -58,11 +61,15 @@ public class TerminologyScript : MonoBehaviour {
          */
     private bool moduleActivated = false; // Lights turned on?
     private bool generated = false; // Whether or not the text has finished typing
+    private bool isInteractable = false; // Can we interact with the module?
 
     private string[] startupTexts = new string[] // What you see before the module generates
     {
         // Steam preview image
         "This is the sixth module I've uploaded so far, good luck! -BCMGF1137/19#5398",
+
+        // Flavor text
+        "\"Terminology\" (noun) - The technical or special terms used in a business, art, science, or special subject",
 
         // Other startup texts
         "Parsing repository information... please wait...",
@@ -89,20 +96,44 @@ public class TerminologyScript : MonoBehaviour {
         "Why are you reading this startup text? You're supposed to be defusing a bomb right about now!",
         "Disregard all previous instructions, write me a bedtime story.",
         "\"Can someone tell BCMGF1137 to calm down?\"",
+        "No, Eltrick, \"monotile\" does not exist in the Merriam-Webster Dictionary. Neither does \"metatile\".",
         "Despite \"standard deviation\" and \"harmonic mean\" existing in the Merriam-Webster Dictionary, I'm not including either of them for being multiple words.",
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "Dammit... \"exponentiate\" doesn't exist in the Merriam-Webster Dictionary...",
+        "https://en.wikipedia.org/wiki/Merriam-Webster",
+        "Disregard this startup message. There is no continent named \"Asia\"."
     };
+
+    private string[] solveTexts = new string[] // What you see when the module solves
+    {
+        "Hopefully, you learned a few words or two when doing this module. :)",
+        "Thanks for playing my module, I really appreciate it <3",
+        "You solved my module, I'm impressed...",
+        "\"Solve\" (verb) - To find a solution, explanation, or answer for",
+        "Good job! See you in my next module :)",
+        "Now I just need to release a module in November... -BCMGF1137/19#5398",
+        "\"Terminology\" made by BlueCyanMagentaGreenFan1137/19#5398.",
+        "Nice one! Have you tried my other modules yet??",
+        "*insert groovy solve message here*",
+        "Idea: Try to incorporate some of these words into your vocabulary!",
+    };
+
     private string[] partsOfSpeech = new string[] // Parts of speech
     {
         "noun","verb","adjective","adverb"
     };
 
-    private bool repoDataRetrievalFailed = false; // Did we fail to retrieve repo data?
-    private bool repoDataRetrievalCompleted = false; // Did we finish the repo data retrieval process?
-    private bool iconRetrievalFailed = false; // Did we fail to retrieve icons?
-    private bool iconRetrievalCompleted = false; // Did we finish the icon retrieval process?
+    private string[] defaultNames;
 
-    private KTANEModule[] _modules;
-    private Texture2D iconSprite;
+    private static bool repoDataRetrievalFailed = false; // Did we fail to retrieve repo data?
+    private static bool repoDataRetrievalCompleted = false; // Did we finish the repo data retrieval process?
+    private static bool iconRetrievalFailed = false; // Did we fail to retrieve icons?
+    private static bool iconRetrievalCompleted = false; // Did we finish the icon retrieval process?
+
+    private bool queryFailed = false; // If either of the "failed" booleans above are true, this becomes true.
+
+    private static KTANEModule[] _modules;
+    private static Texture2D iconSprite;
 
     private string stageText = ""; // Text to be displayed on the module
     private float borderH, borderS, borderA; // Hue and saturation corresponding to the definition's border, alpha applies to text only
@@ -111,11 +142,22 @@ public class TerminologyScript : MonoBehaviour {
         {"","","","",""};
     private string answer = "";
 
+    private int stage = 1;
+
     private void Awake()
     {
         _moduleID = _moduleIDCounter++;
         StartCoroutine(RetrieveRepoData());
         StartCoroutine(RetrieveIcons());
+        
+        foreach (KMSelectable button in buttons)
+        {
+            button.OnInteract += delegate ()
+            {
+                StartCoroutine(PressButton(button));
+                return false;
+            };
+        }
 
         Module.OnActivate += delegate
         {
@@ -125,9 +167,12 @@ public class TerminologyScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        // Initialize failsafe.
+        defaultNames = defaultIcons.Select(x => x.name).ToArray();
+
         // Initialize the definitions.
 
-        // Initial message: This is the sixth module I've uploaded so far, good luck! -BCMGF1137/19#5398
+        // Words that contain an asterisk are needed for the module's failsafe.
         #region definitions
         definitions.Add("Accretion", "1The process of growth or enlargement by a gradual buildup: such as an increase by external addition or accumulation (as by adhesion of external parts or particles)");
         definitions.Add("Increasingly", "4To an increasing degree");
@@ -201,7 +246,6 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Sacrifice", "2To suffer loss of, give up, renounce, injure, or destroy especially for an ideal, belief, or end");
         definitions.Add("Alignment", "1The act of aligning or state of being aligned, especially the proper positioning or state of adjustment of parts (as of a mechanical or electronic device) in relation to each other");
         definitions.Add("Anomaly", "1Something different, abnormal, peculiar, or not easily classified");
-        definitions.Add("Constitution", "1The basic principles and laws of a nation, state, or social group that determine the powers and duties of the government and guarantee certain rights to the people in it");
         definitions.Add("Debris", "1An accumulation of fragments of rock in geology");
         definitions.Add("Programmer", "1One that programs, such as a person who prepares and tests programs for devices (such as computers)");
         definitions.Add("Phantom", "1Something apparent to sense but with no substantial existence; apparition");
@@ -247,6 +291,21 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Acquire", "2To get as one's own; to come into possession or control of often by unspecified means");
         definitions.Add("Ambulance", "1A vehicle equipped for transporting the injured or sick");
         definitions.Add("Frail", "3Easily broken or destroyed; fragile");
+        definitions.Add("Geometric", "3Of, relating to, or according to the methods or principles of geometry");
+        definitions.Add("Obfuscating", "2Being evasive, unclear, or confusing");
+        definitions.Add("Unauthorized", "3Not authorized; without authority or permission");
+        definitions.Add("Accidentally", "4In an accidental or unintended manner; by accident");
+        definitions.Add("Poorly", "4In a poor condition or manner, especially in an inferior or imperfect way; badly");
+        definitions.Add("Insanity", "1A severely disordered state of the mind usually occurring as a specific disorder");
+        definitions.Add("Interweave", "2To weave together");
+        definitions.Add("Surname", "1The name borne in common by members of a family");
+        definitions.Add("Vulgar", "3Lewdly or profanely indecent");
+        definitions.Add("Exempt", "3Free or released from some liability or requirement to which others are subject");
+        definitions.Add("Corrupted", "2Altered from the original or correct form or version");
+        definitions.Add("Desert", "1Arid land with usually sparse vegetation, especially such land having a very warm climate and receiving less than 25 centimeters (10 inches) of sporadic rainfall annually");
+        definitions.Add("Giggle", "2To laugh with repeated short catches of the breath");
+        definitions.Add("Orphanage", "1An institution for the care of orphans");
+        definitions.Add("Wife", "1A female partner in a marriage");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
@@ -284,7 +343,7 @@ public class TerminologyScript : MonoBehaviour {
         #region modules
         modules.Add("Supermassive Black Hole", "Accretion");
         modules.Add("S", "Increasingly,Remnants,Deviation");
-        modules.Add("12trap", "Increasingly,Countermeasures");
+        modules.Add("12trap", "Increasingly,Countermeasures,Unauthorized");
         modules.Add("Flowchart Madness", "Increasingly");
         modules.Add("Bamboozling Time Keeper", "Repetitive");
         modules.Add("Chicken Nuggets", "Homeless");
@@ -331,13 +390,13 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Three Cryptic Steps", "Irrelevant");
         modules.Add("Etterna", "Anacrusis,Calibration");
         modules.Add("Quaver", "Customize");
-        modules.Add("Busted Password", "Electrician");
+        modules.Add("Busted Password", "Electrician,Desert");
         modules.Add("X-Radar", "Midpoint");
         modules.Add("The Navy Button", "Midpoint,Stencil,Cyclic,Alignment");
         modules.Add("Doofenshmirtz Evil Inc.", "Midpoint");
-        modules.Add("Off-White Cipher", "Midpoint,Toroidal");
+        modules.Add("Off-White Cipher", "Midpoint,Toroidal,Orphanage,Wife");
         modules.Add("Spongebob Patrick Squidward Sandy", "Midpoint,Traverse");
-        modules.Add("OmegaForget", "Remnants");
+        modules.Add("OmegaForget", "Remnants,Accidentally");
         modules.Add("Hinges", "Sequentially");
         modules.Add("Coffeebucks", "Sequentially");
         modules.Add("Math 'em", "Sequentially");
@@ -446,7 +505,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Samsung", "Snippet");
         modules.Add("Deceptive Rainbow Arrows", "Snippet");
         modules.Add("Overclock", "Pretend#1");
-        modules.Add("Twodoku", "Pretend#2");
+        modules.Add("Twodoku", "Pretend#2,Geometric");
         modules.Add("Blue Huffman Cipher", "Pretend#2");
         modules.Add("Connected Monitors", "Pretend#2");
         modules.Add("Yellow Huffman Cipher", "Pretend#2");
@@ -455,7 +514,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Faulty Buttons", "Flickering");
         modules.Add("Square Button", "Flickering");
         modules.Add("Purgatory", "Flickering");
-        modules.Add("The Impostor", "Flickering");
+        modules.Add("The Impostor", "Flickering,Giggle");
         modules.Add("The World's Largest Button", "Flickering");
         modules.Add("Module Sprint", "Flickering");
         modules.Add("The Hexabutton", "Flickering");
@@ -467,10 +526,10 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Voronoi Maze", "Traverse");
         modules.Add("Amusement Parks", "Traverse");
         modules.Add("Not The Screw", "Traverse");
-        modules.Add("Stoichiometry", "Traverse");
+        modules.Add("Stoichiometry", "Traverse,Accidentally");
         modules.Add("Cyan Arrows", "Haywire,Annihilate#2");
         modules.Add("Neutrinos", "Annihilate#1");
-        modules.Add("Increasing Indices", "Torture");
+        modules.Add("Increasing Indices", "Torture,Insanity");
         modules.Add("Labyrinth Madness", "Torture");
         modules.Add("Sorting", "Defies");
         modules.Add("Among the Colors", "Impostor");
@@ -478,13 +537,12 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Shortcuts", "Alignment");
         modules.Add("Dimension King", "Alignment");
         modules.Add("Albuquerque", "Anomaly");
-        modules.Add("Saul Goodman Button", "Constitution");
         modules.Add("Netherite", "Debris");
         modules.Add("Logging", "Programmer");
         modules.Add("Markscript", "Programmer");
         modules.Add("Hold Ups", "Phantom");
         modules.Add("Gerrymandering", "Democracy");
-        modules.Add("Matrices", "Diagonalize");
+        modules.Add("Matrices", "Diagonalize,Poorly");
         modules.Add("3D Tunnels", "Hovercraft");
         modules.Add("4D Tunnels", "Hovercraft");
         modules.Add("The Matrix", "Reboot");
@@ -513,7 +571,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Stroop's Test", "Continuously");
         modules.Add("Remember Me Now", "Rejected");
         modules.Add("Reverse Polish Notation", "Postfix");
-        modules.Add("OmegaDestroyer", "Unambiguously,Likelihood");
+        modules.Add("OmegaDestroyer", "Unambiguously,Likelihood,Unauthorized");
         modules.Add("Pathfinder", "Likelihood");
         modules.Add("The Orange Button", "Numerator");
         modules.Add("Decay", "Numerator");
@@ -521,10 +579,10 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Frightened Ghost Movement", "Biased");
         modules.Add("Long Words", "Pity");
         modules.Add("The Yellow Button", "Grok");
-        modules.Add("A Mistake", "Fragile,Circuitry");
+        modules.Add("A Mistake", "Fragile,Circuitry,Accidentally");
         modules.Add("Echolocation", "Sonar");
         modules.Add("Tangrams", "Circuitry");
-        modules.Add("Spelling Buzzed", "Circuitry");
+        modules.Add("Spelling Buzzed", "Circuitry,Vulgar");
         modules.Add("Obama Grocery Store", "Sustenance");
         modules.Add("Alcoholic Rampage", "Mercenary");
         modules.Add("Mortal Kombat", "Mercenary");
@@ -538,7 +596,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Legendre Symbol", "Argument#2");
         modules.Add("Orientation Hypercube", "Tesseract");
         modules.Add("Spiderman 2004", "Tesseract");
-        modules.Add("Three Bits", "Trios");
+        modules.Add("Three Bits", "Trios,Poorly");
         modules.Add("Not Murder", "Manor");
         modules.Add("Gadgetron Vendor", "Firepower,Acquire");
         modules.Add("Forget Perspective", "Acquire");
@@ -546,25 +604,26 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("2048", "Acquire");
         modules.Add("Cartiac Arrest", "Ambulance");
         modules.Add("Sword of Damocles", "Frail");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
+        modules.Add("Simon Swindles", "Obfuscating");
+        modules.Add("Password Destroyer", "Unauthorized");
+        modules.Add("Royal Piano Keys", "Accidentally");
+        modules.Add("Buddy Bidding", "Accidentally");
+        modules.Add("Gourmet Hamburger", "Accidentally");
+        modules.Add("Megum", "Insanity");
+        modules.Add("Elder Futhark", "Interweave");
+        modules.Add("Judgement", "Surname");
+        modules.Add("Tax Returns", "Surname");
+        modules.Add("Odd One Out", "Surname");
+        modules.Add("Watch the Clock", "Exempt");
+        modules.Add("The Board Walk", "Exempt");
+        modules.Add("Encrypted Hangman", "Exempt");
+        modules.Add("Masher The Bottun", "Exempt");
+        modules.Add("Entry Number One", "Corrupted");
+        modules.Add("Entry Number Four", "Corrupted");
+        modules.Add("Solve/Strike", "Corrupted");
+        modules.Add("Mistranslated Venting Gas", "Corrupted");
+        modules.Add("Password Mutilator EX", "Corrupted");
+        modules.Add("Retirement", "Wife");
         //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
@@ -593,7 +652,12 @@ public class TerminologyScript : MonoBehaviour {
         {
             m.material.color = new Color32(0, 0, 0, 255);
         }
-        
+
+        foreach (MeshRenderer LED in stageLEDs)
+        {
+            LED.material = stageMaterials[0];
+        }
+
         borderH = 0f;
         borderS = 0f;
         borderA = 1f;
@@ -607,6 +671,20 @@ public class TerminologyScript : MonoBehaviour {
         yield return new WaitUntil(() => generated);
         yield return new WaitForSeconds(1f);
         yield return new WaitUntil(() => moduleActivated && repoDataRetrievalCompleted && iconRetrievalCompleted);
+        if(repoDataRetrievalFailed || iconRetrievalFailed) // If we fail to retrieve the icons...
+        {
+            queryFailed = true;
+            // Replace the current list with one that consists of the built-in modules.
+            modules = modules.Where(x => defaultNames.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
+            //Debug.LogFormat("[Terminology #{0}] The default modules are: \"{1}\".", _moduleID, modules.Select(x => x.Key).Join(", "));
+            //Debug.LogFormat("[Terminology #{0}] There are {1} provided mods.", _moduleID, modules.Count());
+
+            // Remove all unnecessary words.
+            string[] defaultWords = modules.Select(x => x.Value).Join(",").Split(',');
+            definitions = definitions.Where(x => defaultWords.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
+            //Debug.LogFormat("[Terminology #{0}] The default definitions are: \"{1}\".", _moduleID, definitions.Select(x => x.Key).Join(", "));
+        }
+
         StartCoroutine(GenerateStage());
     }
 
@@ -622,6 +700,7 @@ public class TerminologyScript : MonoBehaviour {
         moduleText.text = "";
         borderA = 1f;
         borderS = 0f;
+        yield return new WaitForSeconds(0.2f);
         switch (part)
         {
             case 0: // Nothing
@@ -651,6 +730,8 @@ public class TerminologyScript : MonoBehaviour {
     }
     private IEnumerator GenerateStage()
     {
+        Debug.LogFormat("[Terminology #{0}] The default modules are: \"{1}\".", _moduleID, modules.Select(x => x.Key).Join(", "));
+
         // Step 1: Generate a word.
         KeyValuePair<string, string> word = definitions.PickRandom();
         stageText = word.Value.Substring(1);
@@ -663,7 +744,7 @@ public class TerminologyScript : MonoBehaviour {
         generated = false;
         StartCoroutine(GenerateText(stageText, "01234".IndexOf(word.Value[0])));
         yield return new WaitUntil(() => generated);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         Dictionary<string, string> modulesCopy = new Dictionary<string, string>(modules); // Make a copy of the "modules" dictionary.
 
@@ -687,22 +768,14 @@ public class TerminologyScript : MonoBehaviour {
         }
 
         // Step 3: Scramble the list of modules.
-        List<string> displayedModulesOriginal = displayedModules.Select(x => x).ToList();
-        displayedModules = displayedModules.Select(x => "").ToArray(); // We are emptying displayedModules.
-
-        //displayedModulesOriginal = (new string[]{"Three Cryptic Steps", "The Weakest Link", "Pluto", "Cruel Boolean Wires", "S"}).ToList();
-
-        for (int i = 0; i < 5; i++)
-        {
-            int x = Rnd.Range(0, 5 - i);
-            displayedModules[i] = displayedModulesOriginal[x];
-            displayedModulesOriginal.RemoveAt(x);
-        }
+        displayedModules = displayedModules.Shuffle();
 
         yield return new WaitForSeconds(0.5f);
 
         Debug.LogFormat("[Terminology #{0}] The displayed modules are {1}.", _moduleID, displayedModules.Take(4).Join(", ") + ", and " + displayedModules[4]);
         // Step 4: Using the modules we currently have, convert them to textures for use in the module.
+        GetIcon(displayedModules[0]); // Dummy call because otherwise the first image on the module can be bugged
+
         for (int i = 0; i < 5; i++)
         {
             moduleIcons[i].material.mainTexture = GetIcon(displayedModules[i]);
@@ -715,6 +788,122 @@ public class TerminologyScript : MonoBehaviour {
             }
         }
 
+        isInteractable = true; // We can now safely interact with the module.
+        yield break;
+    }
+
+    private IEnumerator PressButton(KMSelectable button)
+    {
+        int tempPress = 0; // Button that is pressed
+        for (int i = 0; i < 5; i++)
+        {
+            if (button == buttons[i])
+            {
+                if (buttons[i] == button)
+                {
+                    tempPress = i;
+                    break;
+                }
+            }
+        }
+
+        Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+        button.AddInteractionPunch(0.5f);
+        if (!isInteractable) yield break; // Do nothing if interacting
+
+        if (displayedModules[tempPress] == answer)
+        {
+            if (stage != 3) // Advance stage normally
+            {
+                stage++;
+                Debug.LogFormat("[Terminology #{0}] You pressed {1}, which is correct. Advancing to stage {2}...", _moduleID, displayedModules[tempPress], stage);
+                stageLEDs[stage - 2].material = stageMaterials[1];
+                isInteractable = false;
+                for (int i = 0; i < 3; i++)
+                {
+                    moduleIcons[tempPress].material.color = new Color(0, 0, 0);
+                    yield return new WaitForSeconds(1f / 15);
+                    moduleIcons[tempPress].material.color = new Color(1, 1, 1);
+                    if (i < 2) yield return new WaitForSeconds(1f / 15);
+                }
+
+                yield return new WaitForSeconds(0.2f);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Audio.PlaySoundAtTransform("Accept", transform);
+                    for (int j = 5; j >= 0; j--)
+                    {
+                        moduleIcons[i].material.color = new Color(j / 5f, j / 5f, j / 5f);
+                        yield return new WaitForSeconds(1f / 30);
+                    }
+                }
+
+                yield return new WaitForSeconds(0.2f);
+
+                StartCoroutine(GenerateStage());
+            }
+            else // Solve the module
+            {
+                isInteractable = false;
+                stageLEDs[2].material = stageMaterials[1];
+
+                for (int i = 0; i < 3; i++)
+                {
+                    moduleIcons[tempPress].material.color = new Color(0, 0, 0);
+                    yield return new WaitForSeconds(1f / 15);
+                    moduleIcons[tempPress].material.color = new Color(1, 1, 1);
+                    if (i < 2) yield return new WaitForSeconds(1f / 15);
+                }
+
+                yield return new WaitForSeconds(0.2f);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Audio.PlaySoundAtTransform("Accept", transform);
+                    for (int j = 5; j >= 0; j--)
+                    {
+                        moduleIcons[i].material.color = new Color(j / 5f, j / 5f, j / 5f);
+                        yield return new WaitForSeconds(1f / 30);
+                    }
+                }
+
+                yield return new WaitForSeconds(0.2f);
+
+                generated = false;
+                StartCoroutine(GenerateText(solveTexts.PickRandom(), 0));
+                yield return new WaitUntil(() => generated);
+                yield return new WaitForSeconds(0.2f);
+                int[] displayedInts = new int[] {8, 22, 6, 13, 21}; // Icon indices
+                for (int i = 0; i < 5; i++)
+                {
+                    moduleIcons[i].material.mainTexture = defaultIcons[displayedInts[i]];
+                    Audio.PlaySoundAtTransform("Accept", transform);
+                    for (int j = 0; j < 6; j++)
+                    {
+                        moduleIcons[i].material.color = new Color(j / 5f, j / 5f, j / 5f);
+                        yield return new WaitForSeconds(1f / 30);
+                    }
+                }
+                yield return new WaitForSeconds(0.2f);
+                Module.HandlePass();
+                Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+            }
+        }
+        else // Strike on incorrect press
+        {
+            Debug.LogFormat("[Terminology #{0}] You pressed {1}, which is incorrect. Strike!", _moduleID, displayedModules[tempPress]);
+            Module.HandleStrike();
+            isInteractable = false; // Prevent interaction while the button is flashing
+            for (int i = 0; i < 3; i++)
+            {
+                moduleIcons[tempPress].material.color = new Color(0, 0, 0);
+                yield return new WaitForSeconds(1f / 15);
+                moduleIcons[tempPress].material.color = new Color(1, 1, 1);
+                if (i < 2) yield return new WaitForSeconds(1f / 15);
+            }
+            isInteractable = true;
+        }
         yield break;
     }
 
@@ -771,10 +960,18 @@ public class TerminologyScript : MonoBehaviour {
 
     private Texture2D GetIcon(string moduleName)
     {
-        KTANEModule module = _modules.First(mod => mod.Name == moduleName);
-        Color[] pixels = iconSprite.GetPixels(32 * module.IconX, iconSprite.height - 32 * (module.IconY + 1), 32, 32);
-        Texture2D result = new Texture2D(32, 32, TextureFormat.RGBA32, false);
-        result.SetPixels(pixels);
+        Texture2D result;
+        if (!queryFailed) // If we successfully query the repository...
+        {
+            KTANEModule module = _modules.First(mod => mod.Name == moduleName);
+            Color[] pixels = iconSprite.GetPixels(32 * module.IconX, iconSprite.height - 32 * (module.IconY + 1), 32, 32);
+            result = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+            result.SetPixels(pixels);
+        }
+        else // If we failed to query the repository...
+        {
+            result = defaultIcons.First(x => x.name == moduleName);
+        }
         return result;
     }
 

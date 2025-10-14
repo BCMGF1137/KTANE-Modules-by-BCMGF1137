@@ -2150,7 +2150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 8cebac138cc155a448524164f5e1dae2, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2221,6 +2221,44 @@ MonoBehaviour:
   - {fileID: 114990732127861198}
   - {fileID: 114463355235897656}
   - {fileID: 114195228698545376}
+  stageLEDs:
+  - {fileID: 23255528194153842}
+  - {fileID: 23143646141364772}
+  - {fileID: 23830479674210792}
+  stageMaterials:
+  - {fileID: 2100000, guid: 0bce27b96df70f045b4c64613e73cf09, type: 2}
+  - {fileID: 2100000, guid: 234fc2128729fc44da49a55c0101b62f, type: 2}
+  defaultIcons:
+  - {fileID: 2800000, guid: e687f2d2e2579e64bbee9439727c2826, type: 3}
+  - {fileID: 2800000, guid: 35d2f58e8f251804c9a210266e86914d, type: 3}
+  - {fileID: 2800000, guid: b4e591e8b738e4c4d8477afb9ea6f26a, type: 3}
+  - {fileID: 2800000, guid: f8dd4f4f8c83a2147b18beca499eb154, type: 3}
+  - {fileID: 2800000, guid: fe8fcdd68efe04647acc728030a3a8d3, type: 3}
+  - {fileID: 2800000, guid: 0c7af2c700428bf45bd8ca5b68ba3ea5, type: 3}
+  - {fileID: 2800000, guid: 3347857c3209b6248877eb41e07d2748, type: 3}
+  - {fileID: 2800000, guid: 8eb6acdb3368aad4dacc44cb438dad04, type: 3}
+  - {fileID: 2800000, guid: 8101cc141a8695146b5522b1300f8c6e, type: 3}
+  - {fileID: 2800000, guid: 688c2219b2e8a834da71a20a11f34795, type: 3}
+  - {fileID: 2800000, guid: 94e1d698b8730bf4985e2e7c46956723, type: 3}
+  - {fileID: 2800000, guid: 94806aa39acb67a48a03b1d3bcb6ee65, type: 3}
+  - {fileID: 2800000, guid: 3f07e139951569147b65d89c0f095647, type: 3}
+  - {fileID: 2800000, guid: f4140d70d17c222498cbbcb85987f440, type: 3}
+  - {fileID: 2800000, guid: 300946b458f32c147a0d02d435f6d27a, type: 3}
+  - {fileID: 2800000, guid: 2caabb89b8c5f8a4e90802ebe7c09ab6, type: 3}
+  - {fileID: 2800000, guid: 97a9b9270ecc191489512f7a60455b08, type: 3}
+  - {fileID: 2800000, guid: cc6ce43141c90d540b2cec0aa8b2b373, type: 3}
+  - {fileID: 2800000, guid: 5c05fa8f2d32c464dbf612c8faa36fb5, type: 3}
+  - {fileID: 2800000, guid: e927ff3f856de814380e238634daefb4, type: 3}
+  - {fileID: 2800000, guid: fa0730b9e32accd4f994a2f9c24fa718, type: 3}
+  - {fileID: 2800000, guid: a072e2b6741768b49b1b85bc64c338ca, type: 3}
+  - {fileID: 2800000, guid: aca57ceef97b8c747850ced1a7b4acc3, type: 3}
+  - {fileID: 2800000, guid: 252842400f9078b46af1fda8d2a82975, type: 3}
+  - {fileID: 2800000, guid: 2615a6b141f1a1b4aad1dea7e9d53ad6, type: 3}
+  - {fileID: 2800000, guid: 8d8d9f69a60c4074dbbae8de079683c3, type: 3}
+  - {fileID: 2800000, guid: 652e9332651595f46b8917fcfde738aa, type: 3}
+  - {fileID: 2800000, guid: b13fd199e56824549a46c6890c205e3b, type: 3}
+  - {fileID: 2800000, guid: 8b7320f802247ff4187b1726bc8c8995, type: 3}
+  - {fileID: 2800000, guid: abad7b6a6289d744fae84307d5d165c3, type: 3}
 --- !u!114 &114761495897948840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2259,7 +2297,7 @@ MonoBehaviour:
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
-  ForceSelectionHighlight: 0
+  ForceSelectionHighlight: 1
   ForceInteractionHighlight: 0
 --- !u!114 &114961106676319862
 MonoBehaviour:
