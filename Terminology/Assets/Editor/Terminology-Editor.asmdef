@@ -1,0 +1,10 @@
+{
+  "name": "Terminology-Editor",
+  "references": [
+    "Terminology"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

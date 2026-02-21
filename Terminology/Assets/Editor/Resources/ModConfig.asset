@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: Terminology
+  title: Terminology
+  author: BCMGF1137
+  description: 'This is the sixth module I''ve uploaded so far, good luck!
+
+
+    Determine the word corresponding to its definition in the Merriam-Webster Dictionary,
+    and identify the one displayed module where its manual contains that word.
+
+
+    ///
+
+
+    Realistically speaking, this should have come out a month ago. I got demotivated
+    due to thinking the module was not really satisfying to do when you''re advanced,
+    but I still liked the concept anyway, and it''s pretty soloable when you study
+    it hard enough lol. Enjoy!
+
+    Oh yeah, and there''s Twitch Plays support inside...'
+  version: 0.0.0
+  outputFolder: build
+  previewImage: {fileID: 2800000, guid: 2aa8f796fc6268742b07ba55bbc72276, type: 3}

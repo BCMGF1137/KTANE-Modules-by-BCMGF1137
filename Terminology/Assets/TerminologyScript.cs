@@ -82,7 +82,6 @@ public class TerminologyScript : MonoBehaviour {
         "Hey Siri, define \"ad nauseam\".",
         "*insert groovy startup message here*",
         "This startup message is 43 characters long.",
-        "Finally! I uploaded a module in a month that isn't two more than a multiple of three!",
         "Go watch Battle For Dream Island if you haven't already :)",
         "https://www.newgrounds.com/audio/listen/1210043",
         "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
@@ -101,7 +100,9 @@ public class TerminologyScript : MonoBehaviour {
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "Dammit... \"exponentiate\" doesn't exist in the Merriam-Webster Dictionary...",
         "https://en.wikipedia.org/wiki/Merriam-Webster",
-        "Disregard this startup message. There is no continent named \"Asia\"."
+        "Disregard this startup message. There is no continent named \"Asia\".",
+        "I intended to upload this mod last month but held back due to some issues. Oh well.",
+        "EWW NSFW -BCMGF1137/19#5398",
     };
 
     private string[] solveTexts = new string[] // What you see when the module solves
@@ -111,7 +112,7 @@ public class TerminologyScript : MonoBehaviour {
         "You solved my module, I'm impressed...",
         "\"Solve\" (verb) - To find a solution, explanation, or answer for",
         "Good job! See you in my next module :)",
-        "Now I just need to release a module in November... -BCMGF1137/19#5398",
+        "Now I just need to release a module in February... -BCMGF1137/19#5398",
         "\"Terminology\" made by BlueCyanMagentaGreenFan1137/19#5398.",
         "Nice one! Have you tried my other modules yet??",
         "*insert groovy solve message here*",
@@ -212,7 +213,7 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Composer", "1One that composes, especially a person who writes music");
         definitions.Add("Exploitation", "1An act or instance of exploiting");
         definitions.Add("Primitive", "3Belonging to or characteristic of an early stage of development; crude, rudimentary");
-        definitions.Add("Periodically", "1At regular intervals of time");
+        definitions.Add("Periodically", "4At regular intervals of time");
         definitions.Add("Cyclic", "3Of, relating to, or being a cycle");
         definitions.Add("Undivided", "3Not separated into parts or pieces; existing as a single whole; not divided");
         definitions.Add("Whistle", "1A small wind instrument in which sound is produced by the forcible passage of breath through a slit in a short tube");
@@ -637,7 +638,7 @@ public class TerminologyScript : MonoBehaviour {
         #endregion
 
         //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.",_moduleID, definitions.Select(x => x.Key.Contains("#") ? x.Key.Substring(0, x.Key.Length - 2) : x.Key).Distinct().OrderBy(x => x).Join(", "));
-        //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.", _moduleID, definitions.Select(x => x.Key).Distinct().Join("\n"));
+        //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.", _moduleID, definitions.Select(x => x.Key).Distinct().OrderBy(x => x).Join("\n"));
         //Debug.LogFormat("[Terminology #{0}] It is of length {1}.", _moduleID, definitions.Count);
 
         //string s = definitions.Where(x => !"1234".Contains(x.Value[0])).Select(x => x.Key).OrderBy(x => x).Join(", ");
@@ -730,7 +731,7 @@ public class TerminologyScript : MonoBehaviour {
     }
     private IEnumerator GenerateStage()
     {
-        Debug.LogFormat("[Terminology #{0}] The default modules are: \"{1}\".", _moduleID, modules.Select(x => x.Key).Join(", "));
+        //Debug.LogFormat("[Terminology #{0}] The default modules are: \"{1}\".", _moduleID, modules.Select(x => x.Key).Join(", "));
 
         // Step 1: Generate a word.
         KeyValuePair<string, string> word = definitions.PickRandom();
@@ -886,6 +887,7 @@ public class TerminologyScript : MonoBehaviour {
                     }
                 }
                 yield return new WaitForSeconds(0.2f);
+                Debug.LogFormat("[Terminology #{0}] You pressed {1}, which is correct. Solved!", _moduleID, displayedModules[tempPress]);
                 Module.HandlePass();
                 Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
             }
@@ -981,8 +983,41 @@ public class TerminologyScript : MonoBehaviour {
         definitionBorder.material.color = c;
         moduleText.color = new Color(c.r, c.g, c.b, borderA);
     }
+
+    // Twitch Plays!!1
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press <X> [Press the button in position X (1-5).]";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        yield return null;
+        command = command.ToLowerInvariant();
+        string[] parameters = command.Split(' ');
+        if (parameters.Length != 2 || !parameters[0].EqualsIgnoreCase("press"))
+        {
+            yield return "sendtochaterror That command does not exist!";
+        }
+        else if (parameters[1].Length != 1)
+        {
+            yield return "sendtochaterror The provided position is invalid!";
+        }
+        else
+        {
+            int x = "12345".IndexOf(parameters[1]);
+            if (x == -1) // 12345 does not contain the provided parameter!
+            {
+                yield return "sendtochaterror The provided position is invalid!";
+            }
+            else // Press the button in that position.
+            {
+                buttons[x].OnInteract();
+            }
+        }
+    }
 } // End of main class
 
+#region extraClasses
 // Yes, I did rely on Tricon for this thing
 [Serializable]
 public class KTANEModuleResult
@@ -1005,3 +1040,4 @@ public class KTANEModule
     [JsonProperty("Y")]
     public int IconY { get; private set; }
 }
+#endregion
