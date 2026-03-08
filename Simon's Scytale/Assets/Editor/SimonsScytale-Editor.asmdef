@@ -1,0 +1,10 @@
+{
+  "name": "SimonsScytale-Editor",
+  "references": [
+    "SimonsScytale"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
