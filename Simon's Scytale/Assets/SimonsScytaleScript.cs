@@ -113,6 +113,8 @@ NOTE: This command dynamically changes depending on the number of flashes.";
         
         rotateSpeed = Rnd.Range(1.5f, 2.2f);
 
+        StartCoroutine(RotateScytale());
+
         // Step 1: The Binary Sequence
         bool[] binarySequence = Bomb.GetSerialNumber().Select(x => _ALPHABET.IndexOf(x) >= 5 && _ALPHABET.IndexOf(x) <= 21).ToArray();
         Debug.LogFormat("[Simon's Scytale #{0}] The initial binary sequence is {1}.", _moduleID, binarySequence.Select(x => x ? 1 : 0).Join(""));
@@ -648,7 +650,7 @@ NOTE: This command dynamically changes depending on the number of flashes.";
         }
         return scytale.Join("");
     }
-
+    
     // Keyboard support
     private void EvaluateKeyPresses()
     {
@@ -665,22 +667,6 @@ NOTE: This command dynamically changes depending on the number of flashes.";
             }
         }
     }
-
-    // Update is called once per frame
-    void Update () {
-
-        EvaluateKeyPresses();
-
-        // Rotate the scytale
-        // Original: -180,0,0
-        rotation = (rotation + (invertRotation ? -1f : 1f) * rotateSpeed);
-        cylinder.transform.localEulerAngles = new Vector3(-180, 0, rotation);
-
-        if (moduleSolved)
-        {
-            rotateSpeed /= 1.002f;
-        }
-	}
 
     // Twotch Plays
 
@@ -718,6 +704,22 @@ NOTE: This command dynamically changes depending on the number of flashes.";
                 yield return "solve";
             }
             else yield return "sendtochaterror The given submission sequence is invalid!";
+        }
+    }
+
+    private IEnumerator RotateScytale()
+    {
+        var duration = Rnd.Range(5.0f, 7f);
+        while (true)
+        {
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                cylinder.transform.localEulerAngles = new Vector3(-180f, 0f, Mathf.Lerp(0, 360, elapsed / duration));
+                EvaluateKeyPresses();
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
         }
     }
 }
