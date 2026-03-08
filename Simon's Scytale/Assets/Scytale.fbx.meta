@@ -19,6 +19,8 @@ ModelImporter:
     100026: Hole.002-2
     100028: Light
     100030: //RootNode
+    100032: Camera.001
+    100034: Light.001
     400000: Button.001
     400002: Button.002
     400004: Button.003
@@ -35,7 +37,10 @@ ModelImporter:
     400026: Hole.002-2
     400028: Light
     400030: //RootNode
+    400032: Camera.001
+    400034: Light.001
     2000000: Camera
+    2000002: Camera.001
     2100000: No Name
     2300000: Button.001
     2300002: Button.002
@@ -77,6 +82,7 @@ ModelImporter:
     4300022: Hole.002-1
     4300024: Hole.002-2
     10800000: Light
+    10800002: Light.001
   externalObjects: {}
   materials:
     importMaterials: 1
