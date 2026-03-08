@@ -49,8 +49,8 @@ public class SimonsScytaleScript : MonoBehaviour {
 
     // Do we invert the rotation?
     private bool invertRotation = false;
-    private float rotation = 0f;
-    private float rotateSpeed = 0f;
+    //private float rotation = 0f;
+    //private float rotateSpeed = 0f;
 
     private int[] validColors = new int[3];
     private int[] keys;
@@ -111,7 +111,7 @@ NOTE: This command dynamically changes depending on the number of flashes.";
     void Start () {
         sequenceLength = Rnd.Range(20,31);
         
-        rotateSpeed = Rnd.Range(1.5f, 2.2f);
+        //rotateSpeed = Rnd.Range(1.5f, 2.2f);
 
         StartCoroutine(RotateScytale());
 
@@ -715,7 +715,8 @@ NOTE: This command dynamically changes depending on the number of flashes.";
             var elapsed = 0f;
             while (elapsed < duration)
             {
-                cylinder.transform.localEulerAngles = new Vector3(-180f, 0f, Mathf.Lerp(0, 360, elapsed / duration));
+                cylinder.transform.localEulerAngles = new Vector3(-180f, 0f, 
+                    invertRotation ? Mathf.Lerp(360, 0, elapsed / duration) : Mathf.Lerp(0, 360, elapsed / duration));
                 EvaluateKeyPresses();
                 yield return null;
                 elapsed += Time.deltaTime;

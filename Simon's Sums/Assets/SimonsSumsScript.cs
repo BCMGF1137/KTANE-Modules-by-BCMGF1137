@@ -336,17 +336,15 @@ public class SimonsSumsScript : MonoBehaviour {
 
                 // 7. If this F-value matches a previous F-value earlier in this stage, add one until this rule doesn't apply.
 
-            for (int j = 0; j < i; j++)
+                for (int j = 0; j < i; j++)
+                {
+                    if (flashValues[ii, j] == flashValues[ii, i])
                     {
-                        if (flashValues[ii, j] == flashValues[ii, i])
-                        {
-                            Debug.LogFormat("[Simon's Sums #{0}] Flash {2} of stage {3} has a duplicate flash value, so adding 1 leads to a final flash value calculation of {1}.", _moduleID, flashValues[ii, i], i + 1, ii + 1);
-                            j = 0;
-                            flashValues[ii, i]++;
-                        }
-                    
+                        Debug.LogFormat("[Simon's Sums #{0}] Flash {2} of stage {3} has a duplicate flash value, so adding 1 leads to a final flash value calculation of {1}.", _moduleID, flashValues[ii, i] + 1, i + 1, ii + 1);
+                        j = -1;
+                        flashValues[ii, i]++;
+                    }
                 }
-
             }
         }
 
