@@ -75,6 +75,8 @@ public class SimonsScytaleScript : MonoBehaviour {
         
         rotateSpeed = Rnd.Range(1.5f, 2.2f);
 
+        StartCoroutine(RotateScytale());
+
         // Step 1: The Binary Sequence
         bool[] binarySequence = Bomb.GetSerialNumber().Select(x => _ALPHABET.IndexOf(x) >= 5 && _ALPHABET.IndexOf(x) <= 20).ToArray();
         Debug.LogFormat("[Simon's Scytale #{0}] The initial binary sequence is {1}.", _moduleID, binarySequence.Select(x => x ? 1 : 0).Join(""));
@@ -423,10 +425,19 @@ public class SimonsScytaleScript : MonoBehaviour {
         return scytale.Join("");
     }
 
-    // Update is called once per frame
-    void Update () {
-        // Original: -180,0,0
-        rotation = (rotation + (invertRotation ? -1f : 1f) * rotateSpeed);
-        cylinder.transform.localEulerAngles = new Vector3(-180, 0, rotation);
-	}
+
+    private IEnumerator RotateScytale()
+    {
+        var duration = Rnd.Range(5f, 7f);
+        while (true)
+        {
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                cylinder.transform.localEulerAngles = new Vector3(-180f, 0f, Mathf.Lerp(0, 360, elapsed / duration));
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
+        }
+    }
 }
