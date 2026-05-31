@@ -1,0 +1,10 @@
+{
+  "name": "FractionatedMorseCipher-Editor",
+  "references": [
+    "FractionatedMorseCipher"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

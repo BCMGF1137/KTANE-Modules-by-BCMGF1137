@@ -103,6 +103,10 @@ public class TerminologyScript : MonoBehaviour {
         "Disregard this startup message. There is no continent named \"Asia\".",
         "I intended to upload this mod last month but held back due to some issues. Oh well.",
         "EWW NSFW -BCMGF1137/19#5398",
+        "> People are beginning to question BCMGF1137's existence.",
+        "Is it still \"the big 25\" or \"the small 25\"?",
+        "Just to make sure, you are only reading this just because I am saying this, right?",
+        "\"In other news, the sky is blue, the grass is green, water is wet, and most importantly, the digital root of 2763 is 9.\"",
     };
 
     private string[] solveTexts = new string[] // What you see when the module solves
@@ -116,7 +120,9 @@ public class TerminologyScript : MonoBehaviour {
         "\"Terminology\" made by BlueCyanMagentaGreenFan1137/19#5398.",
         "Nice one! Have you tried my other modules yet??",
         "*insert groovy solve message here*",
-        "Idea: Try to incorporate some of these words into your vocabulary!",
+        "Yes, I am shamelessly self-advertising... don't ask. x_x",
+        "...you didn't look into the source code of my module, did you?!",
+        "Nicely done! Here's 9 points on Twitch Plays for you!",
     };
 
     private string[] partsOfSpeech = new string[] // Parts of speech
@@ -280,7 +286,6 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Mercenary", "1One that serves merely for wages, especially a soldier hired into foreign service");
         definitions.Add("Jackpot", "1The top prize in a game or contest (such as a lottery) that is typically a large fund of money formed by the accumulation of unwon prizes");
         definitions.Add("Cyanide", "1A compound of cyanogen with a more electropositive element or group");
-        definitions.Add("Resembling", "2Being like or similar to");
         definitions.Add("Creativity", "1The ability to create");
         definitions.Add("Argument#1", "1A coherent series of reasons, statements, or facts intended to support or establish a point of view");
         definitions.Add("Argument#2", "1One of the independent variables upon whose value that of a function depends in mathematics");
@@ -307,13 +312,13 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Giggle", "2To laugh with repeated short catches of the breath");
         definitions.Add("Orphanage", "1An institution for the care of orphans");
         definitions.Add("Wife", "1A female partner in a marriage");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
+        definitions.Add("Chrysanthemum", "1Any of various composite plants (genus #######) including weeds, ornamentals grown for their brightly colored often double flower heads, and others important as sources of medicinals and insecticides");
+        definitions.Add("Torrent", "1A tumultuous outpouring; rush");
+        definitions.Add("Effective", "3Producing a decided, decisive, or desired effect");
+        definitions.Add("Auction", "1A sale of property to the highest bidder");
+        definitions.Add("Penalty", "1Disadvantage, loss, or hardship due to some action");
+        definitions.Add("Leeway", "1An allowable margin of freedom or variation; tolerance");
+        definitions.Add("Budget", "1The amount of money that is available for, required for, or assigned to a particular purpose");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
@@ -346,7 +351,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("S", "Increasingly,Remnants,Deviation");
         modules.Add("12trap", "Increasingly,Countermeasures,Unauthorized");
         modules.Add("Flowchart Madness", "Increasingly");
-        modules.Add("Bamboozling Time Keeper", "Repetitive");
+        modules.Add("Bamboozling Time Keeper", "Repetitive,Penalty");
         modules.Add("Chicken Nuggets", "Homeless");
         modules.Add("The Sporglers", "Homeless");
         modules.Add("Spectre Maze","Coincidentally");
@@ -359,7 +364,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Memorable Buttons", "Disregard");
         modules.Add("The Time Keeper", "Disregard");
         modules.Add("Corridors","Disregard");
-        modules.Add("D", "Disregard");
+        modules.Add("D", "Disregard,Penalty");
         modules.Add("The Xenocryst", "Disregard,Annihilate#2");
         modules.Add("Kuro","Disregard");
         modules.Add("Tip Toe", "Disregard");
@@ -375,8 +380,8 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Purchasing Properties", "Disregard");
         modules.Add("Match Refereeing", "Disregard,Annihilate#2,Sonar");
         modules.Add("Cruel Garfield Kart", "Disregard");
-        modules.Add("Follow the Leader", "Disregard");
-        modules.Add("Simon's Sums", "Bored,Recognize");
+        modules.Add("Follow the Leader", "Disregard,Penalty");
+        modules.Add("Simon's Sums", "Bored,Recognize,Penalty");
         modules.Add("Ultimate Custom Night", "Bored");
         modules.Add("The Klaxon", "Irrelevant");
         modules.Add("Simon Smothers", "Irrelevant");
@@ -384,10 +389,10 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Type Racer", "Irrelevant");
         modules.Add("Pluto", "Irrelevant");
         modules.Add("Lines of Code", "Irrelevant,Halving,Argument#2");
-        modules.Add("Modulo Maze", "Irrelevant,Remedy");
+        modules.Add("Modulo Maze", "Irrelevant,Remedy,Penalty");
         modules.Add("Spangled Stars", "Irrelevant");
         modules.Add("Multicolored Digits", "Irrelevant");
-        modules.Add("Video Poker", "Irrelevant,Competitive,Explicitly,Jackpot");
+        modules.Add("Video Poker", "Irrelevant,Competitive,Explicitly,Jackpot,Penalty");
         modules.Add("Three Cryptic Steps", "Irrelevant");
         modules.Add("Etterna", "Anacrusis,Calibration");
         modules.Add("Quaver", "Customize");
@@ -399,13 +404,13 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Spongebob Patrick Squidward Sandy", "Midpoint,Traverse");
         modules.Add("OmegaForget", "Remnants,Accidentally");
         modules.Add("Hinges", "Sequentially");
-        modules.Add("Coffeebucks", "Sequentially");
+        modules.Add("Coffeebucks", "Sequentially,Penalty");
         modules.Add("Math 'em", "Sequentially");
         modules.Add("Roguelike Game", "Inventory,Viable");
         modules.Add("Adventure Game", "Inventory");
         modules.Add("Minecraft Survival", "Inventory");
         modules.Add("Dandy's Floors", "Inventory,Ichor");
-        modules.Add("AMM-041-292", "Inventory,Composer");
+        modules.Add("AMM-041-292", "Inventory,Composer,Penalty");
         modules.Add("Shifting Maze", "Inventory");
         modules.Add("Bakery", "Inventory");
         modules.Add("Sickening Maze", "Inventory,Alignment");
@@ -449,7 +454,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Weakest Link", "Composer");
         modules.Add("Cruel Qualities", "Composer");
         modules.Add("Cheat Checkout", "Exploitation");
-        modules.Add("Two Bits", "Primitive");
+        modules.Add("Two Bits", "Primitive,Poorly");
         modules.Add("Combination Lock", "Periodically");
         modules.Add("Cube Synchronization", "Periodically,Acquire");
         modules.Add("Lombax Cubes", "Periodically");
@@ -530,7 +535,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Stoichiometry", "Traverse,Accidentally");
         modules.Add("Cyan Arrows", "Haywire,Annihilate#2");
         modules.Add("Neutrinos", "Annihilate#1");
-        modules.Add("Increasing Indices", "Torture,Insanity");
+        modules.Add("Increasing Indices", "Torture,Insanity,Penalty");
         modules.Add("Labyrinth Madness", "Torture");
         modules.Add("Sorting", "Defies");
         modules.Add("Among the Colors", "Impostor");
@@ -589,8 +594,6 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Mortal Kombat", "Mercenary");
         modules.Add("Flamin' Finger", "Jackpot");
         modules.Add("Dr. Doctor", "Cyanide");
-        modules.Add("UltraStores", "Resembling");
-        modules.Add("The Octadecayotton", "Resembling");
         modules.Add("Painting", "Creativity");
         modules.Add("Hand Turkey", "Creativity");
         modules.Add("Battle of Wits", "Argument#1");
@@ -601,14 +604,14 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Not Murder", "Manor");
         modules.Add("Gadgetron Vendor", "Firepower,Acquire");
         modules.Add("Forget Perspective", "Acquire");
-        modules.Add("Again", "Acquire");
-        modules.Add("2048", "Acquire");
+        modules.Add("Again", "Acquire,Penalty");
+        modules.Add("2048", "Acquire,Penalty");
         modules.Add("Cartiac Arrest", "Ambulance");
         modules.Add("Sword of Damocles", "Frail");
         modules.Add("Simon Swindles", "Obfuscating");
         modules.Add("Password Destroyer", "Unauthorized");
         modules.Add("Royal Piano Keys", "Accidentally");
-        modules.Add("Buddy Bidding", "Accidentally");
+        modules.Add("Buddy Bidding", "Accidentally,Auction");
         modules.Add("Gourmet Hamburger", "Accidentally");
         modules.Add("Megum", "Insanity");
         modules.Add("Elder Futhark", "Interweave");
@@ -625,6 +628,43 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Mistranslated Venting Gas", "Corrupted");
         modules.Add("Password Mutilator EX", "Corrupted");
         modules.Add("Retirement", "Wife");
+        modules.Add("Got Legs?", "Accidentally");
+        modules.Add("Kudosudoku", "Chrysanthemum");
+        modules.Add("Curriculum", "Effective");
+        modules.Add("Microphone", "Effective");
+        modules.Add("The Cruel Duck", "Effective");
+        modules.Add("The Grand Grimoire", "Effective");
+        modules.Add("Maze Rush", "Penalty");
+        modules.Add("Z", "Penalty");
+        modules.Add("Pentris Sprint", "Penalty");
+        modules.Add("Flashing Circles", "Penalty");
+        modules.Add("Indices Maximus", "Penalty");
+        modules.Add("The London Underground", "Penalty");
+        modules.Add("Tell Me Where", "Penalty");
+        modules.Add("Typing Tutor", "Penalty");
+        modules.Add("Organization", "Penalty");
+        modules.Add("Mazematics", "Penalty");
+        modules.Add("Dreamcipher", "Penalty");
+        modules.Add("Look and Say", "Penalty");
+        modules.Add("Ingredients", "Penalty");
+        modules.Add("Some Buttons", "Penalty");
+        modules.Add("Sbemail Songs", "Penalty");
+        modules.Add("Lightspeed", "Penalty");
+        modules.Add("The Black Button", "Leeway");
+        modules.Add("Ribbit Programming", "Leeway");
+        modules.Add("BuzzFizz", "Budget");
+        modules.Add("Lunchtime", "Budget");
+        modules.Add("Grocery Store", "Budget");
+        modules.Add("Faulty Digital Root", "Budget");
+        modules.Add("Bottom Gear", "Budget");
+        modules.Add("Button Sequence", "Budget");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
