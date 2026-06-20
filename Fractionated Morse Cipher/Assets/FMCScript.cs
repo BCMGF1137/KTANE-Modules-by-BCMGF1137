@@ -66,7 +66,7 @@ public class FMCScript : MonoBehaviour
         if (tpAPIGameObject != null)
         {
             tpAPI = tpAPIGameObject.GetComponent<IDictionary<string, object>>();
-            Debug.LogFormat("[Fractionated Morse Cipher {0}] Twitch Plays is active.", _moduleID);
+            Debug.LogFormat("[Fractionated Morse Cipher #{0}] Twitch Plays is active.", _moduleID);
         }
     }
 
@@ -74,9 +74,9 @@ public class FMCScript : MonoBehaviour
     {
         message = FMCData.messages.PickRandom();
         keyword = FMCData.keywords.PickRandom();
-        Debug.LogFormat("[Fractionated Morse Cipher {0}] Original plaintext: \"{1}\".", _moduleID, message.GetMessage());
-        Debug.LogFormat("[Fractionated Morse Cipher {0}] The module's ciphertext \"{1}\".", _moduleID, message.EncryptMessage(keyword));
-        Debug.LogFormat("[Fractionated Morse Cipher {0}] The utilized keyword is \"{1}\".", _moduleID, keyword.ToUpper());
+        Debug.LogFormat("[Fractionated Morse Cipher #{0}] Original plaintext: \"{1}\".", _moduleID, message.GetMessage());
+        Debug.LogFormat("[Fractionated Morse Cipher #{0}] The module's ciphertext \"{1}\".", _moduleID, message.EncryptMessage(keyword));
+        Debug.LogFormat("[Fractionated Morse Cipher #{0}] The utilized keyword is \"{1}\".", _moduleID, keyword.ToUpper());
 
         string special = "";
         // Determine the hint, i.e. the first few words
@@ -124,7 +124,7 @@ public class FMCScript : MonoBehaviour
         displayText.text = "Find the keyword for the following Fractionated Morse Cipher. It is a quote from an alternative manual of a KTANE module. "
             + special + "\n\n" + message.EncryptMessage(keyword) + " [" + message.EncryptMessage(keyword).Length + "]";
 
-        //Debug.LogFormat("[Fractionated Morse Cipher {0}] No spoilers...", _moduleID);
+        //Debug.LogFormat("[Fractionated Morse Cipher #{0}] No spoilers...", _moduleID);
     }
 
     // Update is called once per frame
@@ -297,13 +297,13 @@ public class FMCScript : MonoBehaviour
             }
             if (submission.Length == 8 || submitChar == '#') // Submit the word, or do so automatically once 8 letters are entered
             {
-                Debug.LogFormat("[Fractionated Morse Cipher {0}] You submitted the keyword \"{1}\".", _moduleID, submission);
+                Debug.LogFormat("[Fractionated Morse Cipher #{0}] You submitted the keyword \"{1}\".", _moduleID, submission);
 
                 // Test the submission
                 bool isSubmissionValid = true;
                 if (submission.Length != submission.Distinct().Count()) // The submission cannot contain duplicate letters.
                 {
-                    Debug.LogFormat("[Fractionated Morse Cipher {0}] The submitted keyword \"{1}\" contains duplicate letters, which is not possible with how a Fractionated Morse Cipher works. Strike!", _moduleID, submission);
+                    Debug.LogFormat("[Fractionated Morse Cipher #{0}] The submitted keyword \"{1}\" contains duplicate letters, which is not possible with how a Fractionated Morse Cipher works. Strike!", _moduleID, submission);
                     isSubmissionValid = false;
                 }
                 else
@@ -311,14 +311,14 @@ public class FMCScript : MonoBehaviour
                     isSubmissionValid = message.EncryptMessage(submission) == message.EncryptMessage(keyword);
                     if (!isSubmissionValid)
                     {
-                        Debug.LogFormat("[Fractionated Morse Cipher {0}] The submitted keyword \"{1}\" would encrypt the original message into \"{2}\", which is not the same as the original display. Strike!", _moduleID, submission, message.EncryptMessage(submission));
+                        Debug.LogFormat("[Fractionated Morse Cipher #{0}] The submitted keyword \"{1}\" would encrypt the original message into \"{2}\", which is not the same as the original display. Strike!", _moduleID, submission, message.EncryptMessage(submission));
                     }
                 }
 
                 if (isSubmissionValid)
                 {
                     moduleSolved = true;
-                    Debug.LogFormat("[Fractionated Morse Cipher {0}] The submitted keyword \"{1}\" is a valid keyword. Solving module...", _moduleID, submission);
+                    Debug.LogFormat("[Fractionated Morse Cipher #{0}] The submitted keyword \"{1}\" is a valid keyword. Solving module...", _moduleID, submission);
                     button.AddInteractionPunch(999f);
                     if (tpAPI != null) tpAPI["ircConnectionSendMessage"] = "(yes)";
                     StartCoroutine(SolveAnimation());
