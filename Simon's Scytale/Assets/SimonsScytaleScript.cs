@@ -220,8 +220,8 @@ NOTE: This command dynamically changes depending on the number of flashes.";
             else // Case E1: The lone bit is a 0
             {
                 // Colors AFTER the 0
-                int x = Array.IndexOf(binarySequence, true) + 6;
-                validColors = new int[] { x % 6 + 1, (x + 1) % 6 + 1, (x + 2) % 6 + 1};
+                int x = Array.IndexOf(binarySequence, false);
+                validColors = new int[] { (x + 1) % 6 + 1, (x + 2) % 6 + 1, (x + 3) % 6 + 1};
                 validColors = validColors.OrderBy(xx => xx).ToArray();
                 Debug.LogFormat("[Simon's Scytale #{0}] The lone bit is a 0.", _moduleID);
             }
@@ -274,7 +274,7 @@ NOTE: This command dynamically changes depending on the number of flashes.";
                 invalidColors[2] = str.Select((x, i) => x != '1' ? (i + 1) : 0).Where(x => x != 0).ToArray()[n];
                 invalidColors = invalidColors.OrderBy(x => x).ToArray();
                 validColors = (new int[] { 1, 2, 3, 4, 5, 6 }).Where(x => !invalidColors.Contains(x)).ToArray();
-                Debug.LogFormat("[Simon's Scytale #{0}] The first bit is a 1. Invalid colors are in positions {1}, {2}, and {3}.", _moduleID, invalidColors[0], invalidColors[1], invalidColors[2]);
+                Debug.LogFormat("[Simon's Scytale #{0}] The first bit is a 0. Invalid colors are in positions {1}, {2}, and {3}.", _moduleID, invalidColors[0], invalidColors[1], invalidColors[2]);
             }
         }
 
