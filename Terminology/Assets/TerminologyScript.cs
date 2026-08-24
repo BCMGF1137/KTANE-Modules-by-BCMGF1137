@@ -107,11 +107,15 @@ public class TerminologyScript : MonoBehaviour {
         "Is it still \"the big 25\" or \"the small 25\"?",
         "Just to make sure, you are only reading this just because I am saying this, right?",
         "\"In other news, the sky is blue, the grass is green, water is wet, and most importantly, the digital root of 2763 is 9.\"",
+        "https://bsky.app/profile/merriam-webster.com",
+        "\"HE ADDED MORE WORDS TO TERMINOLOGY??\" -you, after seeing the update",
+        "No artificial intelligence was used in the making of this module. :)",
+        "WE LOVE THE MAREEP EVOLUTION LINE!!1",
     };
 
     private string[] solveTexts = new string[] // What you see when the module solves
     {
-        "Hopefully, you learned a few words or two when doing this module. :)",
+        "Hopefully, you learned a few words or so when doing this module. :)",
         "Thanks for playing my module, I really appreciate it <3",
         "You solved my module, I'm impressed...",
         "\"Solve\" (verb) - To find a solution, explanation, or answer for",
@@ -210,7 +214,7 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Concentric", "3Having a common center");
         definitions.Add("Explicit", "3Fully revealed or expressed without vagueness, implication, or ambiguity; leaving no question as to meaning or intent");
         definitions.Add("Tolerated", "3To allow to be or to be done without prohibition, hindrance, or contradiction");
-        definitions.Add("Illiterate", "3Having little or no education; especially being unable to read or write");
+        definitions.Add("Illiterate", "3Having little or no education, especially being unable to read or write");
         definitions.Add("Automaton", "1A mechanism that is relatively self-operating");
         definitions.Add("Explicitly", "4In an explicit manner; clearly and without any vagueness or ambiguity");
         definitions.Add("Surly", "3Irritably sullen and churlish in mood or manner");
@@ -307,7 +311,6 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Surname", "1The name borne in common by members of a family");
         definitions.Add("Vulgar", "3Lewdly or profanely indecent");
         definitions.Add("Exempt", "3Free or released from some liability or requirement to which others are subject");
-        definitions.Add("Corrupted", "2Altered from the original or correct form or version");
         definitions.Add("Desert", "1Arid land with usually sparse vegetation, especially such land having a very warm climate and receiving less than 25 centimeters (10 inches) of sporadic rainfall annually");
         definitions.Add("Giggle", "2To laugh with repeated short catches of the breath");
         definitions.Add("Orphanage", "1An institution for the care of orphans");
@@ -319,12 +322,31 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Penalty", "1Disadvantage, loss, or hardship due to some action");
         definitions.Add("Leeway", "1An allowable margin of freedom or variation; tolerance");
         definitions.Add("Budget", "1The amount of money that is available for, required for, or assigned to a particular purpose");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
+        definitions.Add("Unhygienic", "3Not having or showing good hygiene; not hygienic; unsanitary");
+        definitions.Add("Nitroglycerin", "1An oily explosive poisonous liquid C3H5N3O9 used chiefly in making dynamite and in medicine as a vasodilator");
+        definitions.Add("Ibuprofen", "1A nonsteroidal anti-inflammatory drug C13H18O2 used to relieve pain and fever");
+        definitions.Add("Salary", "1Fixed compensation paid regularly for services");
+        definitions.Add("Intercepted", "2Stopped, seized, or interrupted in progress or course or before arrival");
+        definitions.Add("Overleaf", "4On the other side of a leaf (as of a book)");
+        definitions.Add("Pelican", "1Any of a genus (Pelecanus) of large web-footed fish-eating birds with a very large bill and distensible gular pouch");
+        definitions.Add("Microwave", "1A comparatively short electromagnetic wave, especially one between about one millimeter and one meter in wavelength");
+        definitions.Add("Prize", "1Something offered or striven for in competition or in contests of chance");
+        definitions.Add("Allergy", "1Exaggerated or pathological immunological reaction (as by sneezing, difficult breathing, itching, or skin rashes) to substances, situations, or physical states that are without comparable effect on the average individual");
+        definitions.Add("Woodworking", "1The act, process, or occupation of working wood into a useful or desired form");
+        definitions.Add("Thermometer", "1An instrument for determining temperature, specifically one consisting of a sensor housed in a metal probe that registers a change in electrical resistance as a change in temperature");
+        definitions.Add("Diametrically", "4At or along the diameter; in the direction of the diameter");
+        definitions.Add("Taunt", "2To reproach or challenge in a mocking or insulting manner; to jeer at");
+        definitions.Add("Infrastructure", "1The system of public works of a country, state, or region");
+        definitions.Add("Senile", "3Of, relating to, exhibiting, or characteristic of old age");
+        definitions.Add("Criteria", "1Standards on which a judgment or decision may be based");
+        definitions.Add("Criterion", "1A standard on which a judgment or decision may be based");
+        definitions.Add("Implicit", "3Capable of being understood from something else though not clearly or directly stated; implied");
+        definitions.Add("Hexahedron", "1A polyhedron of six faces (such as a cube)");
+        definitions.Add("Lengthen", "2To grow longer");
+        definitions.Add("Viewer#1", "1One that views, such as a person who watches television");
+        definitions.Add("Viewer#2", "1One that views, such as an optical device used in viewing");
+        definitions.Add("Alias", "1An assumed or additional name that a person sometimes uses");
+        definitions.Add("Annoyed", "3Feeling or showing angry irritation");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
@@ -345,18 +367,32 @@ public class TerminologyScript : MonoBehaviour {
         #endregion
         // The commented-out lines above are templates for adding more words.
 
+        /*
+        DO NOT ADD THE FOLLOWING WORDS:
+        - Resembling
+        - Regenerate
+        - Violate
+        - Corrupted
+        - B***h
+
+        They are avoided for any of the following:
+        - Having a definition that is either too difficult to find.
+        - Lacking a definition that makes sense.
+        - Being vulgar (I am VERY uncomfortable searching swear words).
+         */
+
         // List out the modules used in this module.
         #region modules
         modules.Add("Supermassive Black Hole", "Accretion");
         modules.Add("S", "Increasingly,Remnants,Deviation");
-        modules.Add("12trap", "Increasingly,Countermeasures,Unauthorized");
+        modules.Add("12trap", "Increasingly,Countermeasures,Unauthorized,Intercepted");
         modules.Add("Flowchart Madness", "Increasingly");
-        modules.Add("Bamboozling Time Keeper", "Repetitive,Penalty");
+        modules.Add("Bamboozling Time Keeper", "Repetitive,Penalty,Criteria");
         modules.Add("Chicken Nuggets", "Homeless");
         modules.Add("The Sporglers", "Homeless");
         modules.Add("Spectre Maze","Coincidentally");
         modules.Add("Specter Maze","Pilfering,Manor");
-        modules.Add("Bell of Tío", "Armrest");
+        modules.Add("Bell of Tío", "Armrest,Nitroglycerin,Ibuprofen,Salary");
         modules.Add("Cruel Boolean Wires","Incompetence");
         modules.Add("Stacked Deck","Disregard");
         modules.Add("Partitions", "Disregard");
@@ -372,7 +408,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("FizzBuzz", "Disregard");
         modules.Add("Complex Keypad", "Disregard");
         modules.Add("Morse Buttons", "Disregard");
-        modules.Add("Cruel Stars", "Disregard");
+        modules.Add("Cruel Stars", "Disregard,Diametrically");
         modules.Add("The Wire", "Disregard");
         modules.Add("Color Morse", "Disregard");
         modules.Add("Heraldry", "Disregard,Tincture");
@@ -381,7 +417,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Match Refereeing", "Disregard,Annihilate#2,Sonar");
         modules.Add("Cruel Garfield Kart", "Disregard");
         modules.Add("Follow the Leader", "Disregard,Penalty");
-        modules.Add("Simon's Sums", "Bored,Recognize,Penalty");
+        modules.Add("Simon's Sums", "Bored,Recognize,Penalty,Diametrically");
         modules.Add("Ultimate Custom Night", "Bored");
         modules.Add("The Klaxon", "Irrelevant");
         modules.Add("Simon Smothers", "Irrelevant");
@@ -413,8 +449,8 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("AMM-041-292", "Inventory,Composer,Penalty");
         modules.Add("Shifting Maze", "Inventory");
         modules.Add("Bakery", "Inventory");
-        modules.Add("Sickening Maze", "Inventory,Alignment");
-        modules.Add("Suffering Maze", "Inventory,Alignment");
+        modules.Add("Sickening Maze", "Inventory,Alignment,Viewer#2");
+        modules.Add("Suffering Maze", "Inventory,Alignment,Viewer#2");
         modules.Add("Natures", "Competitive");
         modules.Add("Mission Identification", "Competitive");
         modules.Add("Wolf, Goat, and Cabbage", "Competitive");
@@ -435,7 +471,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Simpleton't", "Concentric");
         modules.Add("Marble Tumble", "Concentric");
         modules.Add("Worse Venn Diagram", "Concentric");
-        modules.Add("The Crystal Maze", "Concentric,Whistle,Anomaly");
+        modules.Add("The Crystal Maze", "Concentric,Whistle,Anomaly,Prize");
         modules.Add("Puzzle Pandemonium", "Explicit");
         modules.Add("Subway", "Explicit,Pretend#1");
         modules.Add("Discography", "Explicit");
@@ -445,13 +481,13 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Rule", "Automaton");
         modules.Add("The cRule", "Automaton");
         modules.Add("Game of Ants", "Automaton");
-        modules.Add("Jupiter", "Explicitly");
+        modules.Add("Jupiter", "Explicitly,Diametrically,Criteria");
         modules.Add("SYNC-125 [3]", "Explicitly");
         modules.Add("Hereditary Base Notation", "Explicitly");
         modules.Add("Identification Crisis", "Surly");
-        modules.Add("Mission Control", "Misinterpretation");
+        modules.Add("Mission Control", "Misinterpretation,Criteria");
         modules.Add("Classical Sense", "Composer");
-        modules.Add("The Weakest Link", "Composer");
+        modules.Add("The Weakest Link", "Composer,Prize");
         modules.Add("Cruel Qualities", "Composer");
         modules.Add("Cheat Checkout", "Exploitation");
         modules.Add("Two Bits", "Primitive,Poorly");
@@ -473,7 +509,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Simon Subdivides", "Undivided");
         modules.Add("RPS Judging", "Whistle");
         modules.Add("Office Job", "Alphanumeric");
-        modules.Add("Moddle", "Alphanumeric");
+        modules.Add("Moddle", "Alphanumeric,Criteria");
         modules.Add("Polymodule", "Alphanumeric");
         modules.Add("Passport Control", "Alphanumeric,Citation");
         modules.Add("Not Port Check", "Alphanumeric");
@@ -496,7 +532,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Simon Supports", "Opinion");
         modules.Add("Yellow Arrows", "Screwdriver");
         modules.Add("Splitting The Loot", "Divvied");
-        modules.Add("The Necronomicon", "Disturbance");
+        modules.Add("The Necronomicon", "Disturbance,Alias");
         modules.Add("Ed Balls", "Portrait");
         modules.Add("Color Blindness", "Portrait");
         modules.Add("Street Fighter", "Portrait");
@@ -520,7 +556,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Faulty Buttons", "Flickering");
         modules.Add("Square Button", "Flickering");
         modules.Add("Purgatory", "Flickering");
-        modules.Add("The Impostor", "Flickering,Giggle");
+        modules.Add("The Impostor", "Flickering,Giggle,Impostor");
         modules.Add("The World's Largest Button", "Flickering");
         modules.Add("Module Sprint", "Flickering");
         modules.Add("The Hexabutton", "Flickering");
@@ -553,7 +589,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("4D Tunnels", "Hovercraft");
         modules.Add("The Matrix", "Reboot");
         modules.Add("Intervals", "Recognize");
-        modules.Add("SUSadmin", "Recognize");
+        modules.Add("SUSadmin", "Recognize,Alias");
         modules.Add("Epic Shapes", "Recognize");
         modules.Add("The Twin", "Recognize");
         modules.Add("Forget's Ultimate Showdown", "Recognize");
@@ -593,9 +629,9 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Alcoholic Rampage", "Mercenary");
         modules.Add("Mortal Kombat", "Mercenary");
         modules.Add("Flamin' Finger", "Jackpot");
-        modules.Add("Dr. Doctor", "Cyanide");
+        modules.Add("Dr. Doctor", "Cyanide,Allergy");
         modules.Add("Painting", "Creativity");
-        modules.Add("Hand Turkey", "Creativity");
+        modules.Add("Hand Turkey", "Creativity,Diametrically");
         modules.Add("Battle of Wits", "Argument#1");
         modules.Add("The Legendre Symbol", "Argument#2");
         modules.Add("Orientation Hypercube", "Tesseract");
@@ -610,9 +646,9 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Sword of Damocles", "Frail");
         modules.Add("Simon Swindles", "Obfuscating");
         modules.Add("Password Destroyer", "Unauthorized");
-        modules.Add("Royal Piano Keys", "Accidentally");
+        modules.Add("Royal Piano Keys", "Accidentally,Annoyed");
         modules.Add("Buddy Bidding", "Accidentally,Auction");
-        modules.Add("Gourmet Hamburger", "Accidentally");
+        modules.Add("Gourmet Hamburger", "Accidentally,Overleaf");
         modules.Add("Megum", "Insanity");
         modules.Add("Elder Futhark", "Interweave");
         modules.Add("Judgement", "Surname");
@@ -622,18 +658,13 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Board Walk", "Exempt");
         modules.Add("Encrypted Hangman", "Exempt");
         modules.Add("Masher The Bottun", "Exempt");
-        modules.Add("Entry Number One", "Corrupted");
-        modules.Add("Entry Number Four", "Corrupted");
-        modules.Add("Solve/Strike", "Corrupted");
-        modules.Add("Mistranslated Venting Gas", "Corrupted");
-        modules.Add("Password Mutilator EX", "Corrupted");
         modules.Add("Retirement", "Wife");
         modules.Add("Got Legs?", "Accidentally");
         modules.Add("Kudosudoku", "Chrysanthemum");
         modules.Add("Curriculum", "Effective");
         modules.Add("Microphone", "Effective");
-        modules.Add("The Cruel Duck", "Effective");
-        modules.Add("The Grand Grimoire", "Effective");
+        modules.Add("The Cruel Duck", "Effective,Pelican");
+        modules.Add("The Grand Grimoire", "Effective,Overleaf");
         modules.Add("Maze Rush", "Penalty");
         modules.Add("Z", "Penalty");
         modules.Add("Pentris Sprint", "Penalty");
@@ -653,11 +684,70 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("The Black Button", "Leeway");
         modules.Add("Ribbit Programming", "Leeway");
         modules.Add("BuzzFizz", "Budget");
-        modules.Add("Lunchtime", "Budget");
+        modules.Add("Lunchtime", "Budget,Allergy");
         modules.Add("Grocery Store", "Budget");
         modules.Add("Faulty Digital Root", "Budget");
         modules.Add("Bottom Gear", "Budget");
         modules.Add("Button Sequence", "Budget");
+        modules.Add("Beans", "Unhygienic");
+        modules.Add("Chilli Beans", "Unhygienic");
+        modules.Add("Cool Beans", "Unhygienic,Microwave");
+        modules.Add("Number Cruncher", "Overleaf,Thermometer");
+        modules.Add("Puppet", "Prize");
+        modules.Add("Answer Smash", "Prize");
+        modules.Add("Roshambo", "Prize");
+        modules.Add("Ice Cream", "Allergy");
+        modules.Add("Morse Complication", "Woodworking");
+        modules.Add("Black Sudoku", "Thermometer");
+        modules.Add("Temperature Regulation", "Thermometer");
+        modules.Add("Devilish Eggs", "Thermometer");
+        modules.Add("Sudoku Cipher", "Thermometer");
+        modules.Add("Not X01", "Diametrically");
+        modules.Add("Syzygy", "Diametrically");
+        modules.Add("Keypad Sequence", "Diametrically");
+        modules.Add("Not Bitmaps", "Diametrically");
+        modules.Add("UltraStores", "Diametrically");
+        modules.Add("Simon Stores", "Diametrically");
+        modules.Add("Mineswapper", "Diametrically");
+        modules.Add("Ultimate Cycle", "Diametrically");
+        modules.Add("Unfair's Revenge", "Diametrically");
+        modules.Add("Thirty Dollar Module", "Diametrically");
+        modules.Add("Unfair's Cruel Revenge", "Diametrically");
+        modules.Add("Answering Can Be Fun", "Taunt");
+        modules.Add("City Planning", "Infrastructure");
+        modules.Add("Old Fogey", "Senile");
+        modules.Add("Following Orders", "Criteria");
+        modules.Add("Jack Attack", "Criteria");
+        modules.Add("Only Connect", "Criteria,Criterion");
+        modules.Add("Breakers", "Criteria");
+        modules.Add("Piano Keys", "Criteria");
+        modules.Add("Simon Said", "Criteria");
+        modules.Add("Wordpath", "Criteria");
+        modules.Add("The Stock Market", "Criteria");
+        modules.Add("Cruel Piano Keys", "Criteria");
+        modules.Add("Brown Hexabuttons", "Criteria");
+        modules.Add("Number Pad", "Criteria");
+        modules.Add("Turing Machine", "Criteria");
+        modules.Add("ID Verification", "Criteria");
+        modules.Add("Turing Machine Nightmare", "Criteria");
+        modules.Add("Festive Piano Keys", "Criteria");
+        modules.Add("Exoplanets", "Criterion");
+        modules.Add("Regular Hexpressions", "Implicit,Hexahedron");
+        modules.Add("Actual 4×4×4 Sudoku", "Hexahedron");
+        modules.Add("Latin Hypercube", "Hexahedron");
+        modules.Add("Simon Says", "Lengthen");
+        modules.Add("Simon Strands", "Lengthen");
+        modules.Add("Simon Swivels", "Lengthen");
+        modules.Add("Simultaneous Simons", "Lengthen");
+        modules.Add("Not Keypad", "Lengthen");
+        modules.Add("Bob Barks", "Lengthen");
+        modules.Add("The Octadecayotton", "Viewer#1");
+        modules.Add("Sonic the Hedgehog", "Annoyed");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
+        //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
@@ -677,7 +767,18 @@ public class TerminologyScript : MonoBehaviour {
         //modules.Add("", "");
         #endregion
 
-        //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.",_moduleID, definitions.Select(x => x.Key.Contains("#") ? x.Key.Substring(0, x.Key.Length - 2) : x.Key).Distinct().OrderBy(x => x).Join(", "));
+        /*
+         DO NOT ADD ANY OF THE FOLLOWING MODULES:
+         - Brown Cipher
+         - Tether
+         - Word Count
+
+        These are avoided due to having module names.
+         */
+
+        // For playtesting: Uncomment the following line when the wordlist has changed
+        //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.",_moduleID, definitions.Select(x => "\"" + (x.Key.Contains("#") ? x.Key.Substring(0, x.Key.Length - 2) : x.Key) + "\"").Distinct().OrderBy(x => x).Join(", "));
+
         //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.", _moduleID, definitions.Select(x => x.Key).Distinct().OrderBy(x => x).Join("\n"));
         //Debug.LogFormat("[Terminology #{0}] It is of length {1}.", _moduleID, definitions.Count);
 

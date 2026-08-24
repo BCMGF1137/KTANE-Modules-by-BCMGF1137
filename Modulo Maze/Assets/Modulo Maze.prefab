@@ -519,6 +519,7 @@ GameObject:
   - component: {fileID: 114340648431914554}
   - component: {fileID: 114615344148128442}
   - component: {fileID: 114310318648526686}
+  - component: {fileID: 114641011701954862}
   m_Layer: 0
   m_Name: Modulo Maze
   m_TagString: Untagged
@@ -2096,6 +2097,7 @@ MonoBehaviour:
   - {fileID: 114257533674255420}
   - {fileID: 114901790472450360}
   - {fileID: 114101352913069188}
+  RuleSeedModifier: {fileID: 114641011701954862}
 --- !u!114 &114340648431914554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2261,6 +2263,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShaderNames:
   - KT/Mobile/DiffuseTint
+--- !u!114 &114641011701954862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1861876915187016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf69c2de51bd3c43bbd9bc22578ee08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _seed: 1
 --- !u!114 &114653142923148964
 MonoBehaviour:
   m_ObjectHideFlags: 1

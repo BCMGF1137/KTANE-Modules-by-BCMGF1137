@@ -20170,7 +20170,8 @@ MonoBehaviour:
   TimeLimit: 600
   BombSize: 1
   FrontFaceOnly: 1
-  EdgeworkConfiguration: {fileID: 0}
+  EdgeworkConfiguration: {fileID: 11400000, guid: af4b7b1451993c748b99309ef4c45cc1,
+    type: 2}
   TwitchPlaysActive: 1
   TwitchPlaysMode: 0
   turnSpeed: 128
