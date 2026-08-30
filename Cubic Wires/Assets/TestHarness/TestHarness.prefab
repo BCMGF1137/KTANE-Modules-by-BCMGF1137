@@ -20157,9 +20157,10 @@ MonoBehaviour:
   TwoFactorWidget: {fileID: 114885870854110436}
   CustomWidget: {fileID: 114213089377510072}
   HighlightPrefab: {fileID: 100000, guid: d78a484c6e87f1b47b6596ac080fe942, type: 2}
-  AudioVolume: 0.25
-  AudioClips: []
-  StrikeCount: 3
+  AudioVolume: 0
+  AudioClips:
+  - {fileID: 8300000, guid: ace59b3514433a7449e6c1755c8d2314, type: 3}
+  StrikeCount: 12
   TimeLimit: 9999
   BombSize: 1
   FrontFaceOnly: 1

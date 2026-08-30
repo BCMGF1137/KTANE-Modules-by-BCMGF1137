@@ -1,0 +1,10 @@
+{
+  "name": "CubicWires-Editor",
+  "references": [
+    "CubicWires"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615501dbe4f3fe94fbf4b564abb10237, type: 3}
+  m_Name: ModConfig
+  m_EditorClassIdentifier: 
+  id: CubicWires
+  title: Cubic Wires
+  author: BCMGF1137
+  description: "One of my most complicated 3D modeling undertakings. Enjoy. Or don't,
+    I guess.\r\n\r\n//\r\n\r\nCut all 12 wires from a rotating cube depending on how
+    the cube rotates as well as relations between pairs of wires.\r\n\r\n//\r\n\r\nI
+    had this as a mod idea since like... I think 2024?? I had a relatively simple
+    solving process with it, but changed it to take advantage of the module being
+    a cube.\r\nI kinda had fun with making the wires until I eventually had to learn
+    how to fix the \"normals\" on each of the wires... goshdarnit I have never spent
+    SO MUCH effort on a KTANE module like this\r\n\r\nThis module comes with TP support
+    as usual. One of the solve messages should tell you enough.\r\n\r\n//\r\n\r\nSong:
+    \"Hypercubes\" by Ryzmik // https://www.newgrounds.com/audio/listen/1033872"
+  version: 0.0.0
+  outputFolder: build
+  debugBuild: 1
+  previewImage: {fileID: 2800000, guid: 1e301038068c02540bfee23f565bc54f, type: 3}
