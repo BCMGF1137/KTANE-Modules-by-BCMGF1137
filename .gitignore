@@ -1,2 +1,8 @@
 # Need to ignore FMCData
 /Fractionated Morse Cipher/Assets/FMCData.cs
+
+# Need to ignore entirety of 2584
+/2584/
+
+# Need to ignore entirety of Violet Arrows
+/Violet Arrows/

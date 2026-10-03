@@ -137,7 +137,7 @@ public class SimonsSumsScript : MonoBehaviour {
     void Start()
     {
 
-        Debug.LogFormat("[Simon's Sums #{0}] This module has been generated at Update 1.", _moduleID);
+        //Debug.LogFormat("[Simon's Sums #{0}] This module has been generated at Update 1.", _moduleID);
 
         sequences[0] = Sequence();
         sequences[1] = StrikeSequence();
@@ -1341,7 +1341,7 @@ public class SimonsSumsScript : MonoBehaviour {
 
     private IEnumerator TextAnimation()
     {
-        switch (UnityEngine.Random.Range(0, 12))
+        switch (UnityEngine.Random.Range(0, 14))
         {
             case 0:
             solveText = "YOU JUST SOLVED SIMON'S SUMS!";
@@ -1378,6 +1378,12 @@ public class SimonsSumsScript : MonoBehaviour {
             break;
             case 11:
             solveText = "YOU NOTICED MY SOLVE TEXT... I'M IMPRESSED";
+            break;
+            case 12:
+            solveText = "THAT'S 23 POINTS ON TWITCH PLAYS FOR YOU!";
+            break;
+            case 13:
+            solveText = "BOREDOM REPELLENT UNLOCKED, ENJOY...";
             break;
         }
 
@@ -1481,6 +1487,8 @@ public class SimonsSumsScript : MonoBehaviour {
                         while (((int)Bomb.GetTime() % 10) + (((int)Bomb.GetTime() / 10) % 6) != timepress) yield return "trycancel Press cancelled.";
                         Buttons[order.IndexOf("Y")].OnInteract();
                     }
+                    yield return new WaitForSeconds(0.7f);
+                    if (_moduleSolved) yield return "solve";
                 }
                 else yield return "sendtochaterror The specified sum to press is invalid!";
             }

@@ -398,4 +398,42 @@ public class FMCScript : MonoBehaviour
             }
         }
     }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        yield return null;
+        Debug.LogFormat("[Fractionated Morse Cipher #{0}] Autosolving...", _moduleID);
+        if (!moduleSolved)
+        {
+            submission = "";
+            submitChar = '#';
+            string keywordExtended = keyword.ToUpper() + "#";
+            yield return new WaitForSeconds(0.1f);
+            for (int i = 0; i < keywordExtended.Length; i++)
+            {
+                int increase = _ALPHABET.IndexOf(keywordExtended[i]) - _ALPHABET.IndexOf(submitChar);
+                if (increase < 0) increase += 27;
+                while (increase >= 9)
+                {
+                    buttons[2].OnInteract();
+                    increase -= 9;
+                    yield return new WaitForSeconds(0.1f);
+                }
+                while (increase >= 3)
+                {
+                    buttons[1].OnInteract();
+                    increase -= 3;
+                    yield return new WaitForSeconds(0.1f);
+                }
+                while (increase >= 1)
+                {
+                    buttons[0].OnInteract();
+                    increase -= 1;
+                    yield return new WaitForSeconds(0.1f);
+                }
+                buttons[3].OnInteract();
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+    }
 }

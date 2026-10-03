@@ -201,7 +201,7 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Electrician", "1One who installs, maintains, operates, or repairs electrical equipment");
         definitions.Add("Midpoint", "1A point at or near the center or middle");
         definitions.Add("Stencil", "1An impervious material (such as a sheet of paper, thin wax, or woven fabric) perforated with lettering or a design through which a substance (such as ink, paint, or metallic powder) is forced onto a surface to be printed");
-        definitions.Add("Remnants", "1A usually small part, member, or trace remaining");
+        definitions.Add("Remnants", "1A usually small part, member, or trace remaining (plural)");
         definitions.Add("Sequentially", "4Following in sequence");
         definitions.Add("Inventory", "1An itemized list of current assets: such as a list of goods on hand");
         definitions.Add("Competitive", "3Relating to, characterized by, or based on competition");
@@ -347,14 +347,14 @@ public class TerminologyScript : MonoBehaviour {
         definitions.Add("Viewer#2", "1One that views, such as an optical device used in viewing");
         definitions.Add("Alias", "1An assumed or additional name that a person sometimes uses");
         definitions.Add("Annoyed", "3Feeling or showing angry irritation");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
-        //definitions.Add("?", "??");
+        definitions.Add("Eighteen", "1A number that is one more than seventeen");
+        definitions.Add("Unintentional", "3Not done by intention or design; not intentional");
+        definitions.Add("Stoic", "3Not affected by or showing passion or feeling, especially firmly restrained in response to pain or stress");
+        definitions.Add("Parents", "1One that begets or brings forth offspring (plural)");
+        definitions.Add("Opaque", "3Blocking the passage of radiant energy and especially light; exhibiting opacity");
+        definitions.Add("Coma", "1A state of profound unconsciousness caused by disease, injury, or poison");
+        definitions.Add("Blueprints", "1Photographic prints in white on a bright blue ground or blue on a white ground used especially for copying maps, mechanical drawings, and architects' plans");
+        definitions.Add("Bookworm", "1A person unusually devoted to reading and study");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
         //definitions.Add("?", "??");
@@ -384,14 +384,14 @@ public class TerminologyScript : MonoBehaviour {
         // List out the modules used in this module.
         #region modules
         modules.Add("Supermassive Black Hole", "Accretion");
-        modules.Add("S", "Increasingly,Remnants,Deviation");
+        modules.Add("S", "Increasingly,Remnants,Deviation,Eighteen");
         modules.Add("12trap", "Increasingly,Countermeasures,Unauthorized,Intercepted");
         modules.Add("Flowchart Madness", "Increasingly");
-        modules.Add("Bamboozling Time Keeper", "Repetitive,Penalty,Criteria");
+        modules.Add("Bamboozling Time Keeper", "Repetitive,Penalty,Criteria,Eighteen");
         modules.Add("Chicken Nuggets", "Homeless");
         modules.Add("The Sporglers", "Homeless");
         modules.Add("Spectre Maze","Coincidentally");
-        modules.Add("Specter Maze","Pilfering,Manor");
+        modules.Add("Specter Maze","Pilfering,Manor,Blueprints");
         modules.Add("Bell of Tío", "Armrest,Nitroglycerin,Ibuprofen,Salary");
         modules.Add("Cruel Boolean Wires","Incompetence");
         modules.Add("Stacked Deck","Disregard");
@@ -514,7 +514,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Passport Control", "Alphanumeric,Citation");
         modules.Add("Not Port Check", "Alphanumeric");
         modules.Add("F", "Alphanumeric");
-        modules.Add("Dimension Disruption", "Alphanumeric");
+        modules.Add("Dimension Disruption", "Alphanumeric,Opaque");
         modules.Add("Gryphons", "Alphanumeric");
         modules.Add("Rhythms", "Alphanumeric");
         modules.Add("Mazeswapper", "Alphanumeric");
@@ -544,7 +544,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Weezer", "Snippet");
         modules.Add("Death Note", "Snippet");
         modules.Add("Web Design", "Snippet");
-        modules.Add("The Samsung", "Snippet");
+        modules.Add("The Samsung", "Snippet,Eighteen");
         modules.Add("Deceptive Rainbow Arrows", "Snippet");
         modules.Add("Overclock", "Pretend#1");
         modules.Add("Twodoku", "Pretend#2,Geometric");
@@ -621,9 +621,9 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Frightened Ghost Movement", "Biased");
         modules.Add("Long Words", "Pity");
         modules.Add("The Yellow Button", "Grok");
-        modules.Add("A Mistake", "Fragile,Circuitry,Accidentally");
+        modules.Add("A Mistake", "Fragile,Circuitry,Accidentally,Unintentional");
         modules.Add("Echolocation", "Sonar");
-        modules.Add("Tangrams", "Circuitry");
+        modules.Add("Tangrams", "Circuitry,Blueprints");
         modules.Add("Spelling Buzzed", "Circuitry,Vulgar");
         modules.Add("Obama Grocery Store", "Sustenance");
         modules.Add("Alcoholic Rampage", "Mercenary");
@@ -661,7 +661,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Retirement", "Wife");
         modules.Add("Got Legs?", "Accidentally");
         modules.Add("Kudosudoku", "Chrysanthemum");
-        modules.Add("Curriculum", "Effective");
+        modules.Add("Curriculum", "Effective,Bookworm");
         modules.Add("Microphone", "Effective");
         modules.Add("The Cruel Duck", "Effective,Pelican");
         modules.Add("The Grand Grimoire", "Effective,Overleaf");
@@ -669,7 +669,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Z", "Penalty");
         modules.Add("Pentris Sprint", "Penalty");
         modules.Add("Flashing Circles", "Penalty");
-        modules.Add("Indices Maximus", "Penalty");
+        modules.Add("Indices Maxmius", "Penalty");
         modules.Add("The London Underground", "Penalty");
         modules.Add("Tell Me Where", "Penalty");
         modules.Add("Typing Tutor", "Penalty");
@@ -691,7 +691,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Button Sequence", "Budget");
         modules.Add("Beans", "Unhygienic");
         modules.Add("Chilli Beans", "Unhygienic");
-        modules.Add("Cool Beans", "Unhygienic,Microwave");
+        modules.Add("Cool Beans", "Unhygienic,Microwave,Parents");
         modules.Add("Number Cruncher", "Overleaf,Thermometer");
         modules.Add("Puppet", "Prize");
         modules.Add("Answer Smash", "Prize");
@@ -709,7 +709,7 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("UltraStores", "Diametrically");
         modules.Add("Simon Stores", "Diametrically");
         modules.Add("Mineswapper", "Diametrically");
-        modules.Add("Ultimate Cycle", "Diametrically");
+        modules.Add("Ultimate Cycle", "Diametrically,Blueprints");
         modules.Add("Unfair's Revenge", "Diametrically");
         modules.Add("Thirty Dollar Module", "Diametrically");
         modules.Add("Unfair's Cruel Revenge", "Diametrically");
@@ -743,14 +743,14 @@ public class TerminologyScript : MonoBehaviour {
         modules.Add("Bob Barks", "Lengthen");
         modules.Add("The Octadecayotton", "Viewer#1");
         modules.Add("Sonic the Hedgehog", "Annoyed");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
-        //modules.Add("", "");
+        modules.Add("Forget Me Later", "Eighteen");
+        modules.Add("Turn Four", "Eighteen");
+        modules.Add("Literally Laughing", "Stoic");
+        modules.Add("Krazy Talk", "Parents");
+        modules.Add("Cruel Candy Land", "Parents");
+        modules.Add("The Bulb", "Opaque");
+        modules.Add("Ethan's Dream", "Coma");
+        modules.Add("Fifty Blessings", "Blueprints");
         //modules.Add("", "");
         //modules.Add("", "");
         //modules.Add("", "");
@@ -772,12 +772,9 @@ public class TerminologyScript : MonoBehaviour {
          - Brown Cipher
          - Tether
          - Word Count
-
-        These are avoided due to having module names.
+         - Quantum Passwords
+         - Quiplash
          */
-
-        // For playtesting: Uncomment the following line when the wordlist has changed
-        //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.",_moduleID, definitions.Select(x => "\"" + (x.Key.Contains("#") ? x.Key.Substring(0, x.Key.Length - 2) : x.Key) + "\"").Distinct().OrderBy(x => x).Join(", "));
 
         //Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.", _moduleID, definitions.Select(x => x.Key).Distinct().OrderBy(x => x).Join("\n"));
         //Debug.LogFormat("[Terminology #{0}] It is of length {1}.", _moduleID, definitions.Count);
@@ -786,6 +783,13 @@ public class TerminologyScript : MonoBehaviour {
 
         // Detect if any words lack a part of speech (testing).
         //if (s != "") Debug.LogFormat("[Terminology #{0}] The following words lack a selected part of speech: {1}", _moduleID, s);
+
+        bool testingMode = false;
+        if (testingMode)
+        {
+            Debug.LogFormat("[Terminology #{0}] The modules are:\n{1}", _moduleID, modules.Select(x => x.Key).Distinct().OrderBy(x => x).Join("|"));
+            Debug.LogFormat("[Terminology #{0}] The wordlist is: {1}.", _moduleID, definitions.Select(x => "\"" + (x.Key.Contains("#") ? x.Key.Substring(0, x.Key.Length - 2) : x.Key) + "\"").Distinct().OrderBy(x => x).Join(", "));
+        }
 
         StartCoroutine(InitializeModule());
 

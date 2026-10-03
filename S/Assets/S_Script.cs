@@ -22,6 +22,7 @@ public class S_Script : MonoBehaviour
     public MeshRenderer[] stageMaterials;
     public Light[] lights;
     public KMSelectable[] buttons;
+    public KMSelectable[] soundButtons;
 
     public KMColorblindMode CBM;
 
@@ -33,7 +34,7 @@ public class S_Script : MonoBehaviour
     // Private variables
 
     private bool moduleActivated = false; // When the lights turn on, the mod will generate colors.
-    private bool inputsReceived = false; // The module does not play sounds until inputs are received.
+    private bool playingSounds = false; // The module does not play sounds until inputs are received.
     private bool isInteractable = false; // Nothing happens if you attempt to interact with the mod while animating.
     private bool inSequence = false; // Is the module currently running the sequence?
     private bool colorblindMode = false; // Is colorblind mode enabled?
@@ -61,6 +62,9 @@ public class S_Script : MonoBehaviour
     private int maxStage = 1; // If you strike, stages will not be regenerated.
 
     private bool moduleSolved = false;
+
+    // "yield return solve" stuff
+    private bool moduleStruck = false;
 
     private string[,] stage1Strings = new string[,]
     {
@@ -108,6 +112,15 @@ public class S_Script : MonoBehaviour
             button.OnHighlightEnded += delegate ()
             {
                 HLEndButton(button);
+            };
+        }
+
+        foreach (KMSelectable button in soundButtons)
+        {
+            button.OnInteract += delegate ()
+            {
+                StartCoroutine(ToggleSound(button));
+                return false;
             };
         }
 
@@ -867,7 +880,7 @@ public class S_Script : MonoBehaviour
     {
         isInteractable = false;
         int i = 0;
-        if (inputsReceived)
+        if (playingSounds)
         {
             foreach (MeshRenderer m in buttonMaterials)
             {
@@ -908,7 +921,7 @@ public class S_Script : MonoBehaviour
             for (int i = 0; i < flashPositions[stage - 1].Count; i++)
             {
                 Light j = lights[flashPositions[stage - 1][i]];
-                if (inputsReceived) Audio.PlaySoundAtTransform(flashes[stage - 1][i] + " " + binaryString[i], transform);
+                if (playingSounds) Audio.PlaySoundAtTransform(flashes[stage - 1][i] + " " + binaryString[i], transform);
                 j.enabled = true;
                 yield return new WaitForSeconds(0.32f);
                 j.enabled = false;
@@ -924,7 +937,7 @@ public class S_Script : MonoBehaviour
 
         int tempPress = 0;
         bool chk = false;
-        inputsReceived = true;
+        playingSounds = true;
         //Debug.LogFormat("[S #{0}] inSequence is {1}.", _moduleID, inSequence);
         if (inSequence)
         {
@@ -1007,6 +1020,7 @@ public class S_Script : MonoBehaviour
             }
             if (willStrike)
             {
+                moduleStruck = true;
                 Debug.LogFormat("[S #{0}] That submission was incorrect. Stepping back to Stage 1...", _moduleID, str);
                 Module.HandleStrike();
                 stage = 1;
@@ -1023,6 +1037,7 @@ public class S_Script : MonoBehaviour
                     {
                         Light j = lights[i];
                         if (i != 10) Audio.PlaySoundAtTransform(stageColors[2].ElementAt(i).Key + " 2", transform);
+                        if (i == 9) lights[10].enabled = true; // Force the color in position 10 to be lit. Especially applies on TP.
                         j.enabled = true;
                         yield return new WaitForSeconds(f);
                         f /= 1.1f;
@@ -1046,6 +1061,7 @@ public class S_Script : MonoBehaviour
                     if (maxStage < stage) maxStage = stage;
                 }
             }
+            playingSounds = true;
         }
 
         l.enabled = true;
@@ -1065,6 +1081,13 @@ public class S_Script : MonoBehaviour
                 preparer = StartCoroutine(PrepareColors());
             }
         }
+    }
+
+    IEnumerator ToggleSound(KMSelectable button)
+    {
+        //Debug.LogFormat("[S #{0}] Sound has been toggled.", _moduleID);
+        playingSounds = !playingSounds;
+        yield break;
     }
 
     private void HLButton(KMSelectable button)
@@ -1155,8 +1178,11 @@ public class S_Script : MonoBehaviour
     // Twitch Plays
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} press <0123456789T> [Press the buttons in these positions, where T is the 10th position.] // !{0} press <ROYLGJCABVMS> [Press the corresponding colors, where each color is pressed based on their first letter (except for Rose, which is S).
-You can perform this command in a chain; for example: !{0} 94OYRTJ0] // !{0} colors [Give the names of the colors in the order of the module.]";
+    private readonly string TwitchHelpMessage = @"!{0} press <0123456789T> [Press the buttons in these positions, where T is the 10th position.]
+!{0} press <ROYLGJCABVMS> [Press the corresponding colors, where each color is pressed based on their first letter (except for Rose, which is S).
+You can perform this command in a chain; for example: !{0} 94OYRTJ0]
+!{0} colors [Give the names of the colors in the order of the module.]
+!{0} toggle sound [Toggles the sound.]";
 #pragma warning restore 414
 
     public IEnumerator ProcessTwitchCommand(string command)
@@ -1168,6 +1194,11 @@ You can perform this command in a chain; for example: !{0} 94OYRTJ0] // !{0} col
         if (parameters.Length != 1 && parameters.Length != 2)
         {
             yield return "sendtochaterror That command doesn't exist!";
+            yield break;
+        }
+        else if (command == "TOGGLE SOUND")
+        {
+            soundButtons[1].OnInteract();
             yield break;
         }
         else if (command == "COLORS")
@@ -1208,9 +1239,18 @@ You can perform this command in a chain; for example: !{0} 94OYRTJ0] // !{0} col
                         yield return null;
                         buttons[stageColors[stage - 1].Select(x => x.Key == "Rose" ? 'S' : ("" + x.Key)[0]).ToArray().Join("").IndexOf(parameters[1][i])].OnInteract();
                     }
+                    if (moduleStruck)
+                    {
+                        moduleStruck = false;
+                        break;
+                    }
                     yield return "trycancel";
                     yield return new WaitForSeconds(f);
                     f /= 1.1f;
+                }
+                if (moduleSolved)
+                {
+                    yield return "solve";
                 }
             }
         }
